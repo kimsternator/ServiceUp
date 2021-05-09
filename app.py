@@ -9,16 +9,12 @@ GOOGLE_CLIENT_ID = '675774771358-d9cs6b29kg2ce9tao1l6kq0o55s76fku.apps.googleuse
 
 
 app = Flask(__name__)
-app.secret_key = "thissecretisrequired"
+app.secret_key = 'thissecretisrequired'
 
 
-@app.route("/")
+@app.route('/')
 def home():
     return render_template('home.html')
-    # if 'idinfo' not in session:
-    #     return render_template('home.html')
-    # else:
-    #     return f'Personalized homepage for {session["idinfo"]}'
 
 @app.route('/login',methods = ['POST', 'GET'])
 def login():
@@ -36,23 +32,17 @@ def login():
     else:
         return render_template('login.html')
 
-@app.route("/callback")
-def callback():
-    print(request.args)
-    return request.args
-
-@app.route("/logout")
+@app.route('/logout')
 def logout():
     session.clear()
     return ''
 
-
-@app.route("/index")
-def index():
+@app.route('/profile/<id>')
+def profile():
     pass
 
-@app.route("/login_check")
-def login_check():
+@app.route('/listing/<id>')
+def listing():
     pass
 
 if __name__ == '__main__':
