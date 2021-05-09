@@ -6,4 +6,4 @@ Running Instructions
 4. install requirements [pip3 install -r requirements.txt]
 5. run [python3 app.py]
 6. go to http://localhost:5000/ in browser
-7. deactivate the virtual env with [deactivate
+7. deactivate the virtual env with [deactivate]
