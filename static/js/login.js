@@ -12,8 +12,31 @@ function onSignIn(googleUser) {
   xhr.open('POST', login_url);
   xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
   xhr.onload = function() {
-    console.log('Signed in as: ' + xhr.responseText);
-    window.location = ('http://localhost:5000/');
+    google_info = JSON.parse(xhr.responseText);
+    console.log('Signed in as: ' + google_info['picture']);
+
+    var temp = `picture=${google_info['picture']}`
+    document.cookie = temp;
+    console.log(temp)
+    console.log(document.cookie)
+
+    temp = `email=${google_info['email']}`;
+    document.cookie = temp;
+    console.log(temp)
+    console.log(document.cookie)
+
+    temp = `name=${google_info['name']}`;
+    document.cookie = temp;
+    console.log(temp)
+    console.log(document.cookie)
+
+    temp = `email=${google_info['email']}`;
+    document.cookie = temp;
+    console.log(temp)
+    console.log(document.cookie)
+
+    setTimeout(function(){     window.location = ('http://localhost:5000/');  }, 10000);
+
   };
   xhr.send('idtoken=' + id_token);
 }

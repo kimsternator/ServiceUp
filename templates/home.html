@@ -1,39 +1,14 @@
-<html>
-    <head>
-        <!-- <ul>
-          {% if 'idinfo' in session %}
-            <li><span>{{ session['idinfo']['email'] }}</span>
-            <li><a href="#" onclick="signOut();">Sign out</a>
-          {% else %}
-            <li><a href='http://localhost:5000/login'>Sign in</a>
-          {% endif %}
-        </ul> -->
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" type="text/css" href="static/css/pen.css">
-        <script src="static/js/inf_scroll.js"></script>
-        <script src="https://apis.google.com/js/platform.js" async defer></script>
-        <meta name="google-signin-client_id" content="675774771358-d9cs6b29kg2ce9tao1l6kq0o55s76fku.apps.googleusercontent.com">
-    </head>
-    <body>
-      <div class="header">
-        <div class="headerContent">
-          <img src="https://cloudwars.co/wp-content/uploads/2020/03/servicenow-300x149.png"/>
-          <div class="nav">
-            <img id="profile" src="https://mpng.subpng.com/20180404/sqe/kisspng-computer-icons-user-profile-clip-art-big-5ac5283827d286.2570974715228703281631.jpg"/>
-            <img id="setting" src="https://cdn3.iconfinder.com/data/icons/interface-settings/16/gear-cog-settings-setting-512.png" width="50"/>
-            <div id="post" class="bar">POST</div>
-            {% if 'idinfo' in session %}
-              <div id="sign_out" class="bar">{{ session['idinfo']['email'] }} Sign out</div>
-            {% else %}
-              <div id="sign_in" class="bar">Sign In</div>
-            {% endif %}
-          </div>
-        </div>
-        <div class="headerBreak"></div>
-      </div>
-      <div class="row" id="posts">
-      </div>
+{% extends "base.html" %}
 
-      <img class="load_more" id="load" src="static/images/arrow.png"/>
-    </body>
-</html>
+{% block head %}
+  {{ super() }}
+  <link rel="stylesheet" type="text/css" href="static/css/home.css">
+  <script src="static/js/home.js"></script>
+{% endblock %}
+
+{% block content %}
+  <div class="row" id="posts">
+  </div>
+
+  <img class="load_more" id="load" src="static/images/arrow.png"/>
+{% endblock %}
