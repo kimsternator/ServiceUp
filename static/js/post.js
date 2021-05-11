@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", (event) => {
-  var post = document.getElementById("post");
+  var homepage = document.getElementById("homepage");
   var profile = document.getElementById("profile");
   var setting = document.getElementById("setting");
   var messaging = document.getElementById("messaging");
@@ -7,12 +7,14 @@ document.addEventListener("DOMContentLoaded", (event) => {
   var messageUser = document.getElementById("messageUser");
   var home = document.getElementById("logo");
   
-  post.addEventListener("click", function() {
-    console.log("post");
+  homepage.addEventListener("click", function() {
+    console.log("homepage");
+    window.location = ('http://localhost:5000/');
   });
   
   profile.addEventListener("click", function() {
     console.log("profile");
+    window.location = ('http://localhost:5000/profile');
   });
   
   setting.addEventListener("click", function() {

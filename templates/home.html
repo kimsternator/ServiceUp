@@ -1,14 +1,13 @@
 <html>
     <head>
-        <title>ServiceUp</title>
-        <ul>
+        <!-- <ul>
           {% if 'idinfo' in session %}
             <li><span>{{ session['idinfo']['email'] }}</span>
             <li><a href="#" onclick="signOut();">Sign out</a>
           {% else %}
             <li><a href='http://localhost:5000/login'>Sign in</a>
           {% endif %}
-        </ul>
+        </ul> -->
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" type="text/css" href="static/css/pen.css">
         <script src="static/js/inf_scroll.js"></script>
@@ -21,8 +20,13 @@
           <img src="https://cloudwars.co/wp-content/uploads/2020/03/servicenow-300x149.png"/>
           <div class="nav">
             <img id="profile" src="https://mpng.subpng.com/20180404/sqe/kisspng-computer-icons-user-profile-clip-art-big-5ac5283827d286.2570974715228703281631.jpg"/>
-            <img  id="setting" src="https://cdn3.iconfinder.com/data/icons/interface-settings/16/gear-cog-settings-setting-512.png" width="50"/>
-            <div id="post">POST</div>
+            <img id="setting" src="https://cdn3.iconfinder.com/data/icons/interface-settings/16/gear-cog-settings-setting-512.png" width="50"/>
+            <div id="post" class="bar">POST</div>
+            {% if 'idinfo' in session %}
+              <div id="sign_out" class="bar">{{ session['idinfo']['email'] }} Sign out</div>
+            {% else %}
+              <div id="sign_in" class="bar">Sign In</div>
+            {% endif %}
           </div>
         </div>
         <div class="headerBreak"></div>
