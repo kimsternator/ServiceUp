@@ -6,16 +6,33 @@ document.addEventListener("DOMContentLoaded", (event) => {
   }
   
   var post = document.getElementById("post");
+  var sign_in = document.getElementById("sign_in");
+  var sign_out = document.getElementById("sign_out");
   var profile = document.getElementById("profile");
   var setting = document.getElementById("setting");
   var load_more = document.getElementById("load");
   
   post.addEventListener("click", function() {
     console.log("post");
+    window.location = ('http://localhost:5000/post');
   });
+
+  if (sign_in != null) {
+    sign_in.addEventListener("click", function() {
+      console.log("sign_in");
+      window.location = ('http://localhost:5000/login');
+    });
+  }
+  else if (sign_out != null) {
+    sign_out.addEventListener("click", function() {
+      console.log("sign_out");
+      signOut();
+    });
+  }
   
   profile.addEventListener("click", function() {
     console.log("profile");
+    window.location = ('http://localhost:5000/profile');
   });
   
   setting.addEventListener("click", function() {

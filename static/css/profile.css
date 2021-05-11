@@ -60,7 +60,7 @@ body {
   border: 3px solid gray;
 }
 
-#post {
+.bar {
   border-radius: 25px;
   background-color: green;
   margin-left: 2rem;
@@ -70,7 +70,7 @@ body {
   display: inline-block;
 }
 
-#post:hover, #request:hover {
+.bar:hover, #request:hover {
   background-color: blue;
 }
 

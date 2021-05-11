@@ -1,12 +1,10 @@
-from flask import Flask, session, render_template, request
+from flask import Flask, session, render_template, request, redirect
 from google.oauth2 import id_token
 from google.auth.transport import requests
 
 GOOGLE_CLIENT_ID = '675774771358-d9cs6b29kg2ce9tao1l6kq0o55s76fku.apps.googleusercontent.com'
 
-
 # clientSecret: IQvNBGE53RwdJi3n32nABTmc
-
 
 app = Flask(__name__)
 app.secret_key = 'thissecretisrequired'
@@ -35,11 +33,16 @@ def login():
 @app.route('/logout')
 def logout():
     session.clear()
-    return ''
+    return redirect('/')
 
-@app.route('/profile/<id>')
+@app.route('/profile')
 def profile():
-    pass
+    #TODO: profile_data = retrieve_profile_data_somehow(session['idinfo'])
+    return render_template('profile.html')
+
+@app.route('/post')
+def post():
+    return render_template('post.html')
 
 @app.route('/listing/<id>')
 def listing():
