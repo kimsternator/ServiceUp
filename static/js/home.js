@@ -1,19 +1,22 @@
 document.addEventListener("DOMContentLoaded", (event) => {
   var count = 1;
   
-  for(j = 0; j < 8; j++) {
+  for(j = 0; j < 12; j++) {
     loadMore();
   }
   var load_more = document.getElementById("load");
   
   load_more.addEventListener("click", function() {
     console.log("load_more");
+    for(i = 0; i < 12; i++) {
+        loadMore();
+      }
   });
   
   window.onscroll = function(ev) {
     if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
       // you're at the bottom of the page
-      for(i = 0; i < 8; i++) {
+      for(i = 0; i < 12; i++) {
         loadMore();
       }
     }
@@ -24,46 +27,35 @@ document.addEventListener("DOMContentLoaded", (event) => {
     var col = document.createElement("div");
     var post = document.createElement("div");
     var title = document.createElement("div");
-    var poster = document.createElement("img");
     var pic = document.createElement("img");
-    var desc = document.createElement("ul");
-    var serv = document.createElement("li");
-    var who = document.createElement("li");
-    var when = document.createElement("li");
-    var how = document.createElement("li");
+    var where = document.createElement("div");
+    var time = document.createElement("div");
 
     col.classList.add("column");
     post.classList.add("posting");
     title.classList.add("title");
-    poster.classList.add("poster");
     pic.classList.add("image");
-    desc.classList.add("description");
-
-    poster.src = "https://mpng.subpng.com/20180404/sqe/kisspng-computer-icons-user-profile-clip-art-big-5ac5283827d286.2570974715228703281631.jpg";
+    where.classList.add("loc");
+    time.classList.add("time");
+    
     pic.src = "https://images-na.ssl-images-amazon.com/images/I/615%2BvEiuEEL._AC_SL1226_.jpg";
+    
+    
+    title.innerHTML = "Lawn Mowing Service";
+    where.innerHTML = "San Diego, CA";
+    time.innerHTML = "1" + " hrs ago";
     
     post.id = "post" + count;
     count++;
     
-    serv.innerHTML = "Service: " + "lawn mowing";
-    who.innerHTML = "Who: " + "anyone";
-    when.innerHTML = "When: " + "This Saturday 11am-5pm";
-    how.innerHTML = "How much: " + "$25 for both lawns";
-    title.innerHTML = "Lawn Mowing Service";
-    
-    desc.appendChild(serv);
-    desc.appendChild(who);
-    desc.appendChild(when);
-    desc.appendChild(how);
-    
-    post.appendChild(title);
-    post.appendChild(poster);
     post.appendChild(pic);
-    post.appendChild(desc)
+    post.appendChild(title);
+    post.appendChild(where);
+    post.appendChild(time);
     
     post.addEventListener('click', event => {
-      //handle click
       console.log(post.id);
+      window.location = ("http://localhost:5000/post");
     });
     
     col.appendChild(post);
@@ -72,5 +64,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
   
   function postClicked(anId) {
     console.log(anId);
+    console.log("here");
   }
 });

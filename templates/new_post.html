@@ -2,11 +2,11 @@
 
 {% block head %}
   {{ super() }}
-  <link rel="stylesheet" type="text/css" href="static/css/new_post.css">
-  <script src="static/js/new_post.js"></script>
+  <link rel="stylesheet" type="text/css" href="static/css/base.css">
 {% endblock %}
 
 {% block content %}
+  <link rel="stylesheet" type="text/css" href="static/css/new_post.css">
   <form action="/action_page.php">
     <div class="row">
       <div class="column">
@@ -60,4 +60,6 @@
     </div>
     <button class="submit" type="button" onclick="sendToServ()">Submit</button>
   </form>
+
+  <script src="static/js/new_post.js"></script>
 {% endblock %}

@@ -11,34 +11,45 @@ document.addEventListener("DOMContentLoaded", (event) => {
         }
     }
 
+    function toggleDrop() {
+      var drop = document.getElementById("dropDown");
+      
+      if(drop.style.visibility == "hidden") {
+        drop.style.visibility = "visible";
+      }
+      else {
+        drop.style.visibility = "hidden";
+      }
+    }
+
     var post = document.getElementById("post");
-    var sign_in = document.getElementById("sign_in");
-    var sign_out = document.getElementById("sign_out");
     var profile = document.getElementById("profile");
     var setting = document.getElementById("setting");
     var home_icon = document.getElementById("home_icon");
+    var myProfile = document.getElementById("myprof");
+    var messaging = document.getElementById("messag");
+    var setting = document.getElementById("sett");
+    var sign_inout = document.getElementById("sign");    
 
     post.addEventListener("click", function() {
       console.log("post");
       window.location = ('http://localhost:5000/new_post');
     });
-  
-    if (sign_in != null) {
-      sign_in.addEventListener("click", function() {
+
+    sign_inout.addEventListener("click", function() {
+      if(sign.innerHTML == "Sign In") {
         console.log("sign_in");
         window.location = ('http://localhost:5000/login');
-      });
-    }
-    else if (sign_out != null) {
-      sign_out.addEventListener("click", function() {
+      }
+      else {
         console.log("sign_out");
         signOut();
-      });
-    }
+      }
+    });
     
     profile.addEventListener("click", function() {
       console.log("profile");
-      //window.location = ('http://localhost:5000/profile');
+      toggleDrop();
     });
     
     setting.addEventListener("click", function() {
@@ -46,36 +57,48 @@ document.addEventListener("DOMContentLoaded", (event) => {
     });
 
     home_icon.addEventListener("click", function() {
-        console.log("home icon");
-        window.location = ('http://localhost:5000');
-      });
+      console.log("home icon");
+      window.location = ('http://localhost:5000');
+    });
+
+    myProfile.addEventListener("click", function() {
+      console.log("my profile");
+      window.location = ('http://localhost:5000/profile');
+    });
     
-  
-    var modal = document.getElementById("myModal");
+    messaging.addEventListener("click", function() {
+      console.log("messaging");
+    });
+    
+    setting.addEventListener("click", function() {
+      console.log("setting");
+    });
+    
+    // var modal = document.getElementById("myModal");
 
     // Get the button that opens the modal
-    var btn = document.getElementById("profile");
+    // var btn = document.getElementById("profile");
     
     // Get the <span> element that closes the modal
-    var span = document.getElementsByClassName("close")[0];
+    // var span = document.getElementsByClassName("close")[0];
     
     // When the user clicks the button, open the modal 
-    btn.onclick = function() {
-        modal.style.display = "block";
-    }
+    // btn.onclick = function() {
+    //     modal.style.display = "block";
+    // }
     
     // When the user clicks on <span> (x), close the modal
-    span.onclick = function() {
-        modal.style.display = "none";
-    }
+    // span.onclick = function() {
+    //     modal.style.display = "none";
+    // }
     
     // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    }
-    });
+    // window.onclick = function(event) {
+    //     if (event.target == modal) {
+    //         modal.style.display = "none";
+    //     }
+    // }
+    // });
   
   function signOut() {
     logout_url = 'http://localhost:5000/logout'
@@ -91,3 +114,4 @@ document.addEventListener("DOMContentLoaded", (event) => {
     };
     xhr.send();
   }
+});

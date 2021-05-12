@@ -53,7 +53,7 @@ body {
 .headerContent {
   width: 100%;
   height: auto;
-  margin: 0 auto;
+  margin: auto;
 }
 
 .headerContent .home_icon {
@@ -69,7 +69,7 @@ body {
 .headerBreak {
   width: 100%;
   height: 0;
-  border-bottom: 5px solid #a7e0ee;
+  border-bottom: 5px solid #42bafa;
 }
 
 .nav_icon {
@@ -83,7 +83,7 @@ body {
   top: 1rem;
   width: 100%;
   margin-top: 20px;
-  margin-right 10px;
+  margin-right: 10px;
   height: 40px;
 }
 
@@ -101,6 +101,41 @@ body {
   cursor: pointer;
 }
 
+.nav .dropDown {
+  visibility: hidden;
+  float: right;
+  margin-top: 5rem;
+  margin-right: -5%;
+  border: 2px solid #3cace8;
+  cursor: pointer;
+}
+
+.nav .dropDown a {
+  display: block;
+  padding: 5px;
+  font-size: 1.5rem;
+  text-align: center;
+  background: #42bafa;
+}
+
+.nav .dropDown .link:hover {
+  filter: brightness(80%);
+}
+
+.nav #post {
+  border-radius: 100%;
+  float: left;
+}
+
+.nav img:hover {
+  filter: brightness(80%);
+  border: 3px solid gray;
+}
+
+.nav #post:hover {
+  background: #828282;
+}
+
 .bar, #request {
   border-radius: 25px;
   background-color: green;
@@ -114,76 +149,4 @@ body {
 .bar:hover, #request:hover {
   background-color: blue;
   cursor: pointer;
-}
-
-.row {
-  margin-top: 3rem;
-}
-
-.column {
-  text-align: center;
-  float: left;
-  width: 50%;
-}
-
-/* Clear floats after the columns */
-.row:after {
-  display: table;
-  clear: both;
-}
-
-.posting {
-  border: solid blue;
-  height: 20rem;
-  width: auto;
-  border-radius: 25px;
-  width: 60%;
-  display: inline-block;
-  margin-bottom: 2rem;
-}
-
-.posting:hover {
- border-color: green;
-}
-
-.posting .title {
-  font-size: 2rem;
-}
-
-.posting .description {
-  float: left;
-  list-style: none;
-}
-
-.posting .description li {
-  text-align: left;
-}
-
-.posting .poster {
-  border-radius: 50px;
-  width: 4%;
-  height: auto;
-  margin-right: 1rem;
-  margin-top: -1.7rem;
-  float: right;
-}
-
-.posting .image {
-  width: 30%;
-  height: auto;
-  display: block;
-  margin-right: auto;
-  margin-left: auto;
-}
-
-.load_more {
-  border-radius: 50px;
-  width: 5%;
-  height: auto;
-  margin-right: auto;
-  margin-left: 48%;
-}
-
-.load_more:hover {
-  background-color: green;
 }
