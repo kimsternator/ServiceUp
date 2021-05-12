@@ -4,7 +4,7 @@ from flask_socketio import SocketIO
 # flask_messenger 
 
 #Service up private message system built with flask
-# create a socket in Flask -> ‘flask-socketio’ enables us to do
+# create a socket in Flask -> ‘flask-socketio’ extension enables us to do
 # bi-directional communications between the clients and the server.
 
 #MESSAGING DATABASE 
