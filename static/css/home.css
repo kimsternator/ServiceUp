@@ -16,6 +16,24 @@ body {
   width: 25%;
 }
 
+@media only screen and (max-width: 1200px) {
+  .column {
+    width: 33%;
+  }
+}
+
+@media only screen and (max-width: 950px) {
+  .column {
+    width: 50%;
+  }
+}
+  
+@media only screen and (max-width: 700px) {
+  .column {
+    width: 100%;
+  }
+}
+
 /* Clear floats after the columns */
 .row:after {
   display: table;
@@ -28,7 +46,7 @@ body {
   border-radius: 25px;
   width: 60%;
   display: inline-block;
-  margin-bottom: 2rem;
+  margin-bottom: 5%;
 }
 
 .posting:hover {
@@ -36,7 +54,7 @@ body {
 }
 
 .posting .title {
-  font-size: 1.5rem;
+  font-size: 1.25vw;
   width: 80%;
   text-align: center;
   margin-left: 10%;
@@ -69,13 +87,13 @@ body {
 }
 
 .posting .loc {
-  font-size: 1rem;
+  font-size: 0.8vw;
   text-align: left;
   margin-left: 10%;
 }
 
 .posting .time {
-  font-size: 0.75rem;
+  font-size: 0.6vw;
   text-align: right;
   margin-right: 10%;
   color: gray;

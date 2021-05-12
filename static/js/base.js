@@ -14,11 +14,11 @@ document.addEventListener("DOMContentLoaded", (event) => {
     function toggleDrop() {
       var drop = document.getElementById("dropDown");
       
-      if(drop.style.visibility == "hidden") {
-        drop.style.visibility = "visible";
+      if(drop.style.visibility == "visible") {
+        drop.style.visibility = "hidden";
       }
       else {
-        drop.style.visibility = "hidden";
+        drop.style.visibility = "visible";
       }
     }
 
