@@ -1,6 +1,7 @@
-from flask import Flask, session, render_template, request, redirect
+from flask import Flask, session, render_template, request, redirect, send_from_directory
 from google.oauth2 import id_token
 from google.auth.transport import requests
+import os
 
 GOOGLE_CLIENT_ID = '675774771358-d9cs6b29kg2ce9tao1l6kq0o55s76fku.apps.googleusercontent.com'
 
@@ -44,9 +45,17 @@ def profile():
 def post():
     return render_template('post.html')
 
+@app.route('/new_post')
+def new_post():
+    return render_template('new_post.html')
+
 @app.route('/listing/<id>')
 def listing():
     pass
+
+@app.route('/favicon.ico') 
+def favicon(): 
+    return send_from_directory(os.path.join(app.root_path, 'static/images'), 'favicon.png', mimetype='image/vnd.microsoft.icon')
 
 if __name__ == '__main__':
     app.run(debug=True)

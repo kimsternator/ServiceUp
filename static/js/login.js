@@ -35,8 +35,7 @@ function onSignIn(googleUser) {
     console.log(temp)
     console.log(document.cookie)
 
-    setTimeout(function(){     window.location = ('http://localhost:5000/');  }, 10000);
-
+    window.location = ('http://localhost:5000/');
   };
   xhr.send('idtoken=' + id_token);
 }

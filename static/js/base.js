@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
     post.addEventListener("click", function() {
       console.log("post");
-      window.location = ('http://localhost:5000/post');
+      window.location = ('http://localhost:5000/new_post');
     });
   
     if (sign_in != null) {
@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     
     profile.addEventListener("click", function() {
       console.log("profile");
-      window.location = ('http://localhost:5000/profile');
+      //window.location = ('http://localhost:5000/profile');
     });
     
     setting.addEventListener("click", function() {
@@ -50,7 +50,32 @@ document.addEventListener("DOMContentLoaded", (event) => {
         window.location = ('http://localhost:5000');
       });
     
-  });
+  
+    var modal = document.getElementById("myModal");
+
+    // Get the button that opens the modal
+    var btn = document.getElementById("profile");
+    
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+    
+    // When the user clicks the button, open the modal 
+    btn.onclick = function() {
+        modal.style.display = "block";
+    }
+    
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+    
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+    });
   
   function signOut() {
     logout_url = 'http://localhost:5000/logout'
@@ -59,6 +84,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
     xhr.open('GET', logout_url);
     xhr.onload = function() {
       console.log('Logged out ' + xhr.responseText);
+      document.cookie = "picture=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      document.cookie = "email=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      document.cookie = "name=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
       window.location.reload();
     };
     xhr.send();

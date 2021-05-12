@@ -15,13 +15,22 @@
           <img id="home_icon" src="https://cloudwars.co/wp-content/uploads/2020/03/servicenow-300x149.png"/>
           <div class="nav">
             <img id="profile" src="https://mpng.subpng.com/20180404/sqe/kisspng-computer-icons-user-profile-clip-art-big-5ac5283827d286.2570974715228703281631.jpg"/>
+            <!-- The Modal -->
+            <div id="myModal" class="modal">
+
+              <!-- Modal content -->
+              <div class="modal-content">
+                <span class="close">&times;</span>
+                {% if 'idinfo' in session %}
+                  <div id="sign_out" class="bar">{{ session['idinfo']['email'] }} Sign out</div>
+                {% else %}
+                  <div id="sign_in" class="bar">Sign In</div>
+                {% endif %}
+              </div>
+
+            </div>
             <img id="setting" src="https://cdn3.iconfinder.com/data/icons/interface-settings/16/gear-cog-settings-setting-512.png" width="50"/>
             <div id="post" class="bar">POST</div>
-            {% if 'idinfo' in session %}
-              <div id="sign_out" class="bar">{{ session['idinfo']['email'] }} Sign out</div>
-            {% else %}
-              <div id="sign_in" class="bar">Sign In</div>
-            {% endif %}
           </div>
         </div>
         <div class="headerBreak"></div>

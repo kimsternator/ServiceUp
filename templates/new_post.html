@@ -1,85 +1,63 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+{% extends "base.html" %}
 
-        <title>Coming Soon</title>
+{% block head %}
+  {{ super() }}
+  <link rel="stylesheet" type="text/css" href="static/css/new_post.css">
+  <script src="static/js/new_post.js"></script>
+{% endblock %}
 
-        <meta name="author" content="Flint Tropics">
-        <meta name="description" content="ECE140B">
-
-        <link rel="stylesheet" type="text/css" href="static/css/new_post.css">
-    </head>
-    <body>
-        <div class="header">
-          <div class="headerContent">
-            <img id="logo" src="https://cloudwars.co/wp-content/uploads/2020/03/servicenow-300x149.png"/>
-            <div class="nav">
-              <img id="profile" src="https://mpng.subpng.com/20180404/sqe/kisspng-computer-icons-user-profile-clip-art-big-5ac5283827d286.2570974715228703281631.jpg"/>
-              <img  id="setting" src="https://cdn3.iconfinder.com/data/icons/interface-settings/16/gear-cog-settings-setting-512.png" width="50"/>
-              <img id="messaging" src=https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFn7AQecL992owq8IzGEFmFlbLroPxiWfxVQ&usqp=CAU/>
-              <div id="post">POST</div>
-            </div>
+{% block content %}
+  <form action="/action_page.php">
+    <div class="row">
+      <div class="column">
+        <div class="image">
+          <div>
+          <img id="preview" class="preview" src="https://www.houseofcharity.org/wp-content/uploads/2019/07/White-Square.jpg">
           </div>
-          <div class="headerBreak"></div>
+          <div>
+            <input type="file" class="upload" accept="image/*" onchange="preview_image(event)">
+          </div>
+        </div>
+      </div>
+      <div class="column">
+        <div class="in">
+          <textarea id="serv" placeholder="Service Name" maxlength="20"></textarea>
+          <div class="count">
+            <span id="servCount">0</span>
+            <span id="maximum">/ 20</span>
+          </div>
         </div>
         <br>
-        <br>
-        <form action="/action_page.php">
-          <div class="row">
-            <div class="column">
-              <div class="image">
-                <div>
-                <img id="preview" class="preview" src="https://www.houseofcharity.org/wp-content/uploads/2019/07/White-Square.jpg">
-                </div>
-                <div>
-                  <input type="file" class="upload" accept="image/*" onchange="preview_image(event)">
-                </div>
-              </div>
-            </div>
-            <div class="column">
-              <div class="in">
-                <textarea id="serv" placeholder="Service Name" maxlength="20"></textarea>
-                <div class="count">
-                  <span id="servCount">0</span>
-                  <span id="maximum">/ 20</span>
-                </div>
-              </div>
-              <br>
-              <div class="in">
-                <textarea id="who" placeholder="Who is Offering?" maxlength="20"></textarea>
-                <div class="count">
-                  <span id="whoCount">0</span>
-                  <span id="maximum">/ 20</span>
-                </div>
-              </div>
-              <div class="in">
-                <textarea id="when" placeholder="When is this?" maxlength="20"></textarea>
-                <div class="count">
-                  <span id="whenCount">0</span>
-                  <span id="maximum">/ 20</span>
-                </div>
-              </div>
-              <div class="in">
-                <textarea id="how" placeholder="Compensation" maxlength="20"></textarea>
-                <div class="count">
-                  <span id="howCount">0</span>
-                  <span id="maximum">/ 20</span>
-                </div>
-              </div>
-              <div class="in">
-                <textarea id="desc" placeholder="Description" maxlength="100"></textarea>
-                <div class="count">
-                  <span id="descCount">0</span>
-                  <span id="maximum">/ 100</span>
-                </div>
-              </div>
-            </div>
+        <div class="in">
+          <textarea id="who" placeholder="Who is Offering?" maxlength="20"></textarea>
+          <div class="count">
+            <span id="whoCount">0</span>
+            <span id="maximum">/ 20</span>
           </div>
-          <button class="submit" type="button" onclick="sendToServ()">Submit</button>
-        </form>
-
-        <script defer src="static/js/new_post.js"></script>
-    </body>
-</html>
+        </div>
+        <div class="in">
+          <textarea id="when" placeholder="When is this?" maxlength="20"></textarea>
+          <div class="count">
+            <span id="whenCount">0</span>
+            <span id="maximum">/ 20</span>
+          </div>
+        </div>
+        <div class="in">
+          <textarea id="how" placeholder="Compensation" maxlength="20"></textarea>
+          <div class="count">
+            <span id="howCount">0</span>
+            <span id="maximum">/ 20</span>
+          </div>
+        </div>
+        <div class="in">
+          <textarea id="desc" placeholder="Description" maxlength="100"></textarea>
+          <div class="count">
+            <span id="descCount">0</span>
+            <span id="maximum">/ 100</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="submit" type="button" onclick="sendToServ()">Submit</button>
+  </form>
+{% endblock %}
