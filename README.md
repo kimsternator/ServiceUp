@@ -3,7 +3,7 @@ NEW DOCKER RUNNING INSTRUCTIONS
 2. if running first time open second terminal after this ^ command
    and run [docker exec -it agile-web bash]
    then inside the new bash that comes up run [python init_db.py]
-3. go to [localhost:5000]
+3. go to [http://localhost:5000/]
 
 OLD VIRTUAL_ENV Running Instructions
 
