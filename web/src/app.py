@@ -66,6 +66,35 @@ def post():
 def new_post():
     return render_template('new_post.html')
 
+#### Adding Route to handle adding posts to the database 
+@app.route('/adding_post',methods=['GET', 'POST'])
+def adding_post():
+    if request.method == 'POST':
+        new_post_dict = request.json # this should give us a dictionary with our inputs lets try it
+        # grabbing dict data
+        service_name = new_post_dict['serv']
+        offerer = new_post_dict['who']
+        availability = new_post_dict['when']
+        compensation = new_post_dict['how']
+        description = new_post_dict['desc']
+
+        # Connect to the database so that we could insert new post information 
+        db = mysql.connect(user=db_user, password=db_pass, host=db_host, database=db_name)
+        cursor = db.cursor()
+        cursor.execute('INSERT INTO Posts(service_type, who, available, compensation, info) VALUES (%s,%s,%s,%s,%s)', (service_name, offerer, availability, compensation, description))
+        db.commit()
+
+        # Selecting Records - just to check to make sure all is good
+        cursor.execute("select * from Posts;")
+        print('---------- DATABASE INITIALIZED ----------')
+        [print(x) for x in cursor]
+        db.close()
+
+    else:
+        print('-------could not get post-------')
+    
+    return 'Success'
+
 @app.route('/listing/<id>')
 def listing():
     pass

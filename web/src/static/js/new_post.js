@@ -24,6 +24,14 @@ function sendToServ() {
   dict[desc.id] = desc.value;
   
   console.log(JSON.stringify(dict));
+  console.log(JSON.stringify(dict));
+  fetch('http://localhost:5000/adding_post', {
+      method: 'POST', // or 'PUT'
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(dict), // sending over dictionary
+    })
 }
 
 document.getElementById('serv').onkeyup = function () {
