@@ -73,6 +73,14 @@ def post():
 def new_post():
     return render_template('new_post.html')
 
+@app.route("/terms_of_service")
+def terms_of_service():
+    return render_template('tos.html')
+
+@app.route("/privacy_policy")
+def privacy_policy():
+    return render_template('pp.html')
+
 #### Adding Route to handle adding posts to the database 
 @app.route('/adding_post',methods=['GET', 'POST'])
 def adding_post():

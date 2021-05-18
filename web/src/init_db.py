@@ -52,7 +52,7 @@ except Exception as e:
   print("Users table already exists. Not recreating it.")
 
 try: 
-  cursor.exucute("""
+  cursor.execute("""
     CREATE TABLE IF NOT EXISTS Messages (
      index int AUTO_INCREMENT PRIMARY KEY,
      date TEXT NOT NULL,

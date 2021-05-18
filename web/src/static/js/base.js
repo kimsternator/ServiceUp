@@ -29,6 +29,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
     var myProfile = document.getElementById("myprof");
     var messaging = document.getElementById("messag");
     var setting = document.getElementById("sett");
+    var tos = document.getElementById("tos");
+    var pp = document.getElementById("pp");
     var sign_inout = document.getElementById("sign");    
 
     post.addEventListener("click", function() {
@@ -54,6 +56,16 @@ document.addEventListener("DOMContentLoaded", (event) => {
     
     setting.addEventListener("click", function() {
       console.log("setting");
+    });
+
+    tos.addEventListener("click", function() {
+      console.log("tos");
+      window.location = ('http://localhost:5000/terms_of_service');
+    });
+
+    pp.addEventListener("click", function() {
+      console.log("pp");
+      window.location = ('http://localhost:5000/privacy_policy');
     });
 
     home_icon.addEventListener("click", function() {
