@@ -24,6 +24,7 @@ try:
   cursor.execute("""
     CREATE TABLE Posts (
     id int AUTO_INCREMENT PRIMARY KEY,
+    userID INT NOT NULL, 
     service_type VARCHAR (20) NOT NULL,
     who VARCHAR (20) NOT NULL,
     available VARCHAR (20) NOT NULL,
@@ -34,5 +35,37 @@ try:
 except Exception as e:
   print(e)
   print("Posts table already exists. Not recreating it.")
+
+try: 
+  cursor.execute("""
+    CREATE TABLE Users( 
+      userID int AUTO_INCREMENT PRIMARY KEY,
+      googleID TEXT NOT NULL,
+      email VARCHAR (20) NOT NULL,
+      name  VARCHAR (20) NOT NULL,
+      lastName VARCHAR (20) NOT NULL,
+      urlToProfilePic TEXT NOT NULL
+   );
+  """)
+except Exception as e:
+  print(e)
+  print("Users table already exists. Not recreating it.")
+
+try: 
+  cursor.exucute("""
+    CREATE TABLE IF NOT EXISTS Messages (
+     index int AUTO_INCREMENT PRIMARY KEY,
+     date TEXT NOT NULL,
+     message TEXT NOT NULL,
+     receiverUserID int NOT NULL,
+     senderUserID int NOT NULL
+    );   
+  """)
+
+except Exception as e:
+  print(e)
+  print("Messages table already exists. Not recreating it.")
+
+
 
 db.close()

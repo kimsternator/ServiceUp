@@ -40,6 +40,13 @@ def login():
         try:
             idinfo = id_token.verify_oauth2_token(token, requests.Request(), GOOGLE_CLIENT_ID)
             session['idinfo'] = idinfo
+            db = mysql.connect(user=db_user, password=db_pass, host=db_host, database=db_name)
+            cursor = db.cursor()
+            query = (f"select from Users where id is {idinfo['id']}")
+            cursor.execute(query)
+            if len(cursor) == 0 : 
+                cursor.execute('INSERT INTO Users(googleID, email, name, lastName, urlToProfilePic ) VALUES (%s,%s,%s,%s,%s)', (idinfo['id'], idinfo['email'], idinfo['name'], idinfo['last name'], idinfo['url to profile pic']))
+                db.commit()
             # idinfo is a dict that has email, name, last name, url to profile pic, and id, as well as some other oauth stuff
             return idinfo
         except ValueError:
@@ -81,7 +88,7 @@ def adding_post():
         # Connect to the database so that we could insert new post information 
         db = mysql.connect(user=db_user, password=db_pass, host=db_host, database=db_name)
         cursor = db.cursor()
-        cursor.execute('INSERT INTO Posts(service_type, who, available, compensation, info) VALUES (%s,%s,%s,%s,%s)', (service_name, offerer, availability, compensation, description))
+        cursor.execute('INSERT INTO Posts(id, service_type, who, available, compensation, info) VALUES (%s,%s,%s,%s,%s)', (session['id'], service_name, offerer, availability, compensation, description))
         db.commit()
 
         # Selecting Records - just to check to make sure all is good
