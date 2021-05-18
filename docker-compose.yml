@@ -6,7 +6,7 @@ services:
     build:
       context: ./web
     ports:
-      - 5000:5000 # host : container
+      - 6004:6004 # host : container
     env_file:
       ./credentials.env
     volumes:

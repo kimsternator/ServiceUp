@@ -1,3 +1,5 @@
+const base_link = 'http://localhost:6004/'
+
 function onSignIn(googleUser) {
   var profile = googleUser.getBasicProfile();
   console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
@@ -6,7 +8,7 @@ function onSignIn(googleUser) {
   console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
 
   var id_token = googleUser.getAuthResponse().id_token;
-  login_url = 'http://localhost:5000/login'
+  login_url = base_link + 'login'
 
   var xhr = new XMLHttpRequest();
   xhr.open('POST', login_url);
@@ -35,7 +37,7 @@ function onSignIn(googleUser) {
     console.log(temp)
     console.log(document.cookie)
 
-    window.location = ('http://localhost:5000/');
+    window.location = (base_link);
   };
   xhr.send('idtoken=' + id_token);
 }

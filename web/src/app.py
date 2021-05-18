@@ -40,15 +40,38 @@ def login():
         try:
             idinfo = id_token.verify_oauth2_token(token, requests.Request(), GOOGLE_CLIENT_ID)
             session['idinfo'] = idinfo
-            db = mysql.connect(user=db_user, password=db_pass, host=db_host, database=db_name)
-            cursor = db.cursor()
-            query = (f"select from Users where id is {idinfo['id']}")
-            cursor.execute(query)
-            if len(cursor) == 0 : 
-                cursor.execute('INSERT INTO Users(googleID, email, name, lastName, urlToProfilePic ) VALUES (%s,%s,%s,%s,%s)', (idinfo['id'], idinfo['email'], idinfo['name'], idinfo['last name'], idinfo['url to profile pic']))
-                db.commit()
-            # idinfo is a dict that has email, name, last name, url to profile pic, and id, as well as some other oauth stuff
             return idinfo
+
+            ''' EXAMPLE idinfo 
+            {
+                "iss":"accounts.google.com",
+                "azp":"675774771358-d9cs6b29kg2ce9tao1l6kq0o55s76fku.apps.googleusercontent.com",
+                "aud":"675774771358-d9cs6b29kg2ce9tao1l6kq0o55s76fku.apps.googleusercontent.com",
+                "sub":"STRING",
+                "hd":"ucsd.edu",
+                "email":"valtov@ucsd.edu",
+                "email_verified":true,
+                "at_hash":"STRING",
+                "name":"Vladimir Altov",
+                "picture":"https://lh3.googleusercontent.com/a/AATXAJzcKY8n-t6GCuOc-DfyPmefcNZTjPgFWJlhYqLw=s96-c",
+                "given_name":"Vladimir",
+                "family_name":"Altov",
+                "locale":"en",
+                "iat":int,
+                "exp":int,
+                "jti":"STRING"
+            }
+            '''
+            # THIS DOESN'T WORK, SOMETHING TO DO WITH SQL, IT RETURNS A VERY VAGUE ERROR THAT LITERALLY JUST SAYS YOUR SQL HAS A SYNTAX ERROR
+            # PLEASE TEST BEFORE COMMITTING TO MASTER BRANCH
+            #
+            # db = mysql.connect(user=db_user, password=db_pass, host=db_host, database=db_name)
+            # cursor = db.cursor()
+            # query = (f"select * from Users where email is {idinfo['email']}")
+            # cursor.execute(query)
+            # if len(cursor) == 0 : 
+            #     cursor.execute('INSERT INTO Users(email, name, lastName, urlToProfilePic ) VALUES (%s,%s,%s,%s)', (idinfo['email'], idinfo['given_name'], idinfo['family_name'], idinfo['picture']))
+            #     db.commit()
         except ValueError:
             print('Invalid token')
             return 'invalid'
@@ -120,5 +143,5 @@ def favicon():
 
 if __name__ == '__main__':
     # app.run(debug=True)
-    server = make_server('0.0.0.0', 5000, app)
+    server = make_server('0.0.0.0', 6004, app)
     server.serve_forever()

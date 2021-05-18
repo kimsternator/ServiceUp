@@ -1,3 +1,5 @@
+const base_link = 'http://localhost:6004/'
+
 document.addEventListener("DOMContentLoaded", (event) => {
   var count = 1;
   
@@ -55,7 +57,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     
     post.addEventListener('click', event => {
       console.log(post.id);
-      window.location = ("http://localhost:5000/post");
+      window.location = (base_link + '/post');
     });
     
     col.appendChild(post);

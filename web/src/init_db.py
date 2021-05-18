@@ -18,18 +18,20 @@ cursor = db.cursor()
 # # CAUTION!!! CAUTION!!! CAUTION!!! CAUTION!!! CAUTION!!! CAUTION!!! CAUTION!!!
 # I'LL LEAVE THIS FOR NOW FOR TESTING PURPOSES, DELETE LATER!!
 cursor.execute("drop table if exists Posts;")
+cursor.execute("drop table if exists Users;")
+cursor.execute("drop table if exists Messages;")
 
 # Create a TStudents table (wrapping it in a try-except is good practice)
 try:
   cursor.execute("""
     CREATE TABLE Posts (
-    id int AUTO_INCREMENT PRIMARY KEY,
-    userID INT NOT NULL, 
-    service_type VARCHAR (20) NOT NULL,
-    who VARCHAR (20) NOT NULL,
-    available VARCHAR (20) NOT NULL,
-    compensation VARCHAR (20) NOT NULL,
-    info TINYTEXT NOT NULL
+    id              integer AUTO_INCREMENT PRIMARY KEY,
+    userID          INT NOT NULL, 
+    service_type    VARCHAR (20) NOT NULL,
+    who             VARCHAR (20) NOT NULL,
+    available       VARCHAR (20) NOT NULL,
+    compensation    VARCHAR (20) NOT NULL,
+    info            TINYTEXT NOT NULL
   );
   """)
 except Exception as e:
@@ -38,13 +40,12 @@ except Exception as e:
 
 try: 
   cursor.execute("""
-    CREATE TABLE Users( 
-      userID int AUTO_INCREMENT PRIMARY KEY,
-      googleID TEXT NOT NULL,
-      email VARCHAR (20) NOT NULL,
-      name  VARCHAR (20) NOT NULL,
-      lastName VARCHAR (20) NOT NULL,
-      urlToProfilePic TEXT NOT NULL
+    CREATE TABLE Users ( 
+      id                integer AUTO_INCREMENT PRIMARY KEY,
+      email             VARCHAR (20) NOT NULL,
+      name              VARCHAR (20) NOT NULL,
+      lastName          VARCHAR (20) NOT NULL,
+      urlToProfilePic   TEXT NOT NULL
    );
   """)
 except Exception as e:
@@ -53,12 +54,12 @@ except Exception as e:
 
 try: 
   cursor.execute("""
-    CREATE TABLE IF NOT EXISTS Messages (
-     index int AUTO_INCREMENT PRIMARY KEY,
-     date TEXT NOT NULL,
-     message TEXT NOT NULL,
-     receiverUserID int NOT NULL,
-     senderUserID int NOT NULL
+    CREATE TABLE Messages (
+     index                integer AUTO_INCREMENT PRIMARY KEY,
+     created_at           TEXT NOT NULL,
+     message              TEXT NOT NULL,
+     receiverUserID       int NOT NULL,
+     senderUserID         int NOT NULL
     );   
   """)
 

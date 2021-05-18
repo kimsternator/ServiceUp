@@ -1,3 +1,5 @@
+const base_link = 'http://localhost:6004/'
+
 function preview_image(event) {
   var reader = new FileReader();
 
@@ -25,7 +27,7 @@ function sendToServ() {
   
   console.log(JSON.stringify(dict));
   console.log(JSON.stringify(dict));
-  fetch('http://localhost:5000/adding_post', {
+  fetch(base_link + 'adding_post', {
       method: 'POST', // or 'PUT'
       headers: {
         'Content-Type': 'application/json',

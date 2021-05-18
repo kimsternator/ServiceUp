@@ -1,3 +1,5 @@
+const base_link = 'http://localhost:6004/'
+
 document.addEventListener("DOMContentLoaded", (event) => {
 
     var cookies = document.cookie;
@@ -35,13 +37,13 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
     post.addEventListener("click", function() {
       console.log("post");
-      window.location = ('http://localhost:5000/new_post');
+      window.location = (base_link + 'new_post');
     });
 
     sign_inout.addEventListener("click", function() {
       if(sign.innerHTML == "Sign In") {
         console.log("sign_in");
-        window.location = ('http://localhost:5000/login');
+        window.location = (base_link + 'login');
       }
       else {
         console.log("sign_out");
@@ -60,22 +62,22 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
     tos.addEventListener("click", function() {
       console.log("tos");
-      window.location = ('http://localhost:5000/terms_of_service');
+      window.location = (base_link + 'terms_of_service');
     });
 
     pp.addEventListener("click", function() {
       console.log("pp");
-      window.location = ('http://localhost:5000/privacy_policy');
+      window.location = (base_link + 'privacy_policy');
     });
 
     home_icon.addEventListener("click", function() {
       console.log("home icon");
-      window.location = ('http://localhost:5000');
+      window.location = (base_link);
     });
 
     myProfile.addEventListener("click", function() {
       console.log("my profile");
-      window.location = ('http://localhost:5000/profile');
+      window.location = (base_link + 'profile');
     });
     
     messaging.addEventListener("click", function() {
@@ -113,7 +115,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     // });
   
   function signOut() {
-    logout_url = 'http://localhost:5000/logout'
+    logout_url = base_link + 'logout'
   
     var xhr = new XMLHttpRequest();
     xhr.open('GET', logout_url);
