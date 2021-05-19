@@ -2,4 +2,6 @@ __pycache__
 my_venv
 .gitignore
 db
+my_env
+.idea
 key.json
