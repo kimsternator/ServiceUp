@@ -1,5 +1,3 @@
-const base_link = 'http://localhost:6004/'
-
 document.addEventListener("DOMContentLoaded", (event) => {
   var count = 1;
   
