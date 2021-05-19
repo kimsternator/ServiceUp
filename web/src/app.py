@@ -10,6 +10,8 @@ import google_storage as uploader
 import hashlib
 import time
 
+from ip2geotools.databases.noncommercial import DbIpCity
+
 GOOGLE_CLIENT_ID = '675774771358-d9cs6b29kg2ce9tao1l6kq0o55s76fku.apps.googleusercontent.com'
 
 db_user = os.environ['MYSQL_USER']
@@ -98,6 +100,7 @@ def submit_post():
     #
     #
     files = request.files.getlist('filename')
+    image_links = []
     print(type(files))
     for file in files:
         print(type(file))
@@ -105,9 +108,41 @@ def submit_post():
         new_name = hashlib.md5((session['idinfo']['email'] + str(time.time())).encode()).hexdigest()
         print(new_name)
         link = up.upload(file, file.filename, new_name)
-    
+        image_links.append(link)
+
+    # get the user ID
+    # db = mysql.connect(user=db_user, password=db_pass, host=db_host, database=db_name)
+    # cursor = db.cursor()
+    # query = (f"select id from Users where email={session['idinfo']['email']}")
+    # cursor.execute(query)
+    # userID = cursor.fetchall()[0]
+    # db.commit()
+
+    if request.form.get('city', type=str) is None:
+        ip = request.remote_addr
+        print(ip)
+        city = DbIpCity.get(ip, api_key='free').city
+        print(city)
+        # request.form.add("city", DbIpCity.get(ip, api_key='free').city)
+
+    print(request.form.to_dict(flat=False))
     # request.form[''] contains all the different data the user put in
     print(request.form)
+
+    # put everything in the databases
+    # cursor = db.cursor()
+    # query = (f"insert into Posts (userID, title, description, price, tag, city) values ({userID}, {request.form.get("title", type=str)}, {request.form.get("description", type=str)}, {request.form.get("price", type=str)}, {request.form.get("tag", type=str)}, {request.form.get("city", type=str)});")
+    # cursor.execute(query)
+    # db.commit()
+    # query = (f"SELECT * FROM Table ORDER BY ID DESC LIMIT 1;")
+    # cursor.execute(query)
+    # postID = cursor.fetchall[0]
+    # image_links = [f"({postID}, {linkurl})" for linkurl in links]
+    # db.commit()
+    # query = (f"insert into Images (postID, url) values {", ".join(image_links)}")
+    # cursor.execute(query)
+    # db.commit()
+    # db.close()
     
     return f'IM THINKING THIS SHOULD REDIRECT TO A PAGE WITH A LINK TO THE POST THEY JUST CREATED: {link}'
 
