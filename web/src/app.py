@@ -6,6 +6,10 @@ from google.auth.transport import requests
 import mysql.connector as mysql
 import os
 
+import google_storage as uploader
+import hashlib
+import time
+
 GOOGLE_CLIENT_ID = '675774771358-d9cs6b29kg2ce9tao1l6kq0o55s76fku.apps.googleusercontent.com'
 
 db_user = os.environ['MYSQL_USER']
@@ -82,6 +86,30 @@ def login():
 def logout():
     session.clear()
     return redirect('/')
+
+
+@app.route('/submit_post', methods=['POST'])
+def submit_post():
+    if 'idinfo' not in session:
+        return 'MUST BE LOGGED IN'
+    # VERIFY VALIDITY OF FILES BEFORE UPLOADING TO DATABASE HERE
+    #
+    #
+    #
+    #
+    files = request.files.getlist('filename')
+    print(type(files))
+    for file in files:
+        print(type(file))
+        up = uploader.ImageUpload()
+        new_name = hashlib.md5((session['idinfo']['email'] + str(time.time())).encode()).hexdigest()
+        print(new_name)
+        link = up.upload(file, file.filename, new_name)
+    
+    # request.form[''] contains all the different data the user put in
+    print(request.form)
+    
+    return f'IM THINKING THIS SHOULD REDIRECT TO A PAGE WITH A LINK TO THE POST THEY JUST CREATED: {link}'
 
 @app.route('/profile')
 def profile():

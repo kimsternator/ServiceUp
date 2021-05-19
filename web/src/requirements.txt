@@ -5,3 +5,4 @@ requests-file==1.4.3
 requests-unixsocket==0.2.0
 mysql-connector-python
 python-dotenv
+google-cloud-storage

@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block head %}
+  {{ super() }}
+  <link rel="stylesheet" type="text/css" href="static/css/base.css">
+{% endblock %}
+
+{% block content %}
+  <link rel="stylesheet" type="text/css" href="static/css/new_post.css">
+  <form method="POST" action="/submit_post" enctype="multipart/form-data">
+    <div class="row">
+      <div class="column">
+        <div class="image">
+          <div>
+          <img id="preview" class="preview" src="https://www.houseofcharity.org/wp-content/uploads/2019/07/White-Square.jpg">
+          </div>
+          <div>
+            <input type="file" name="inputFile" class="upload" accept="image/*">
+          </div>
+        </div>
+      </div>
+      <div class="column">
+        <div class="in">
+          <textarea id="serv" placeholder="Service Name" maxlength="20"></textarea>
+          <div class="count">
+            <span id="servCount">0</span>
+            <span id="maximum">/ 20</span>
+          </div>
+        </div>
+        <br>
+        <div class="in">
+          <textarea id="who" placeholder="Who is Offering?" maxlength="20"></textarea>
+          <div class="count">
+            <span id="whoCount">0</span>
+            <span id="maximum">/ 20</span>
+          </div>
+        </div>
+        <div class="in">
+          <textarea id="when" placeholder="When is this?" maxlength="20"></textarea>
+          <div class="count">
+            <span id="whenCount">0</span>
+            <span id="maximum">/ 20</span>
+          </div>
+        </div>
+        <div class="in">
+          <textarea id="how" placeholder="Compensation" maxlength="20"></textarea>
+          <div class="count">
+            <span id="howCount">0</span>
+            <span id="maximum">/ 20</span>
+          </div>
+        </div>
+        <div class="in">
+          <textarea id="desc" placeholder="Description" maxlength="100"></textarea>
+          <div class="count">
+            <span id="descCount">0</span>
+            <span id="maximum">/ 100</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="submit" type="button">Submit</button>
+  </form>
+
+  <script src="static/js/new_post.js"></script>
+{% endblock %}
