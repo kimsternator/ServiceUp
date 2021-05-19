@@ -1,6 +1,10 @@
 function preview_images(event) {
   var previews = document.getElementById('imageStart');
 
+  while (previews.firstChild) {
+    previews.removeChild(previews.lastChild);
+  }
+
   function readAndPreview(file) {
     var reader = new FileReader();
 

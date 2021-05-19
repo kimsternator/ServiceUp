@@ -1,0 +1,177 @@
+@charset "utf-8"
+body {
+  background-color: yellow;
+  margin: 0;
+}
+
+.header {
+  width: 100%;
+  height: 8.3rem;
+  background-color: white;
+  padding-top: 4px;
+}
+
+.headerContent {
+  width: 100%;
+  height: auto;
+  margin: 0 auto;
+}
+
+.headerContent img {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+/*   width:  */
+}
+
+.headerBreak {
+  width: 100%;
+  height: 0;
+  border-bottom: 5px solid #a7e0ee;
+  display: inline-block;
+}
+
+.nav_icon {
+  position: fixed;
+  margin-left: 20px;
+}
+
+
+.nav {
+  position: fixed;
+  top: 1rem;
+  width: 100%;
+  margin-top: 20px;
+  margin-right 10px;
+  height: 40px;
+}
+
+.nav img {
+  width: 4%;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  display: inline-block;
+  float: right;
+  margin-right: 1rem;
+}
+
+.nav img:hover {
+  border: 3px solid gray;
+}
+
+.row {
+  margin-top: 3rem;
+}
+
+.column {
+  text-align: center;
+  float: left;
+  width: 50%;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  display: table;
+  clear: both;
+}
+
+#post {
+  border-radius: 25px;
+  background-color: green;
+  margin-left: 2rem;
+  font-size: 2rem;
+  border: solid blue;
+  padding: 1rem 2rem;
+  display: inline-block;
+}
+
+#post:hover, #request:hover {
+  background-color: blue;
+}
+
+.row .column .image {
+  display: block;
+  height: 20rem;
+}
+
+.row .column .image div {
+  display: block;
+  height: 11rem;
+  width: 100%;
+}
+
+.row .column .image .preview {
+  width: 20%;
+  margin-right: 20%;
+  float: right;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.row .column .image .upload {
+  width: 40%;
+  float: right;
+  margin-left: 10rem;
+  margin-top: 2rem;
+}
+
+.row .column .in {
+  display: block;
+  float: left;
+  position: relative;
+  margin-right: 10rem;
+  margin-bottom: 2rem;
+}
+
+.row .column .in textarea, input, button {
+  display: inline-block;
+  resize: none;
+  border: 2px solid black;
+  float: left;
+  font-size: 1.5rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  width: 60%;
+}
+
+.row .column .in #formFileMultiple {
+  width: 64%;
+}
+
+.row .column .in button:hover {
+  filter: brightness(0.8);
+}
+
+.row .column .in #desc {
+  width: 70%;
+  height: 9rem;
+}
+
+.row .column .in .count {
+  clear: both;
+  display: inline-block;
+  width: 20%;
+  text-align: left;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  margin-top: 1.7rem;
+  margin-left: -3rem;
+}
+
+#priceCount, #priceMax {
+  visibility: hidden;
+}
+
+#descCountID {
+  margin-top: 9rem;
+  width: 10%;
+}
+
+.submit {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  height: 2.5rem;
+  width: 5rem;
+}

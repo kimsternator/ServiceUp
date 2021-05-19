@@ -122,7 +122,7 @@ def post():
 
 @app.route('/new_post')
 def new_post():
-    return render_template('new_post.html')
+    return render_template('new_postNEW.html')
 
 @app.route("/terms_of_service")
 def terms_of_service():

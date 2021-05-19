@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block head %}
+  {{ super() }}
+  <link rel="stylesheet" type="text/css" href="static/css/base.css">
+  <link rel="stylesheet" type="text/css" href="static/css/new_postNEW.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+  <title>Guestbook</title>
+{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" type="text/css" href="static/css/new_postNEW.css">
+<div class="row">
+  <div class="column">
+    <div class="image" id="imageStart">
+    </div>
+  </div>
+  <div class="column">
+    <section>
+      <form class="in" action="/submit_post" method="post" enctype="multipart/form-data">
+        <div id="guestbookName">
+          <input id="title" name="title" placeholder="Title" maxlength="20" required />
+          <div class="count">
+            <span id="titleCount">0</span>
+            <span>/ 20</span>
+          </div>
+        </div>
+        <div id="guestbookPrice">
+          <input id="price" name="price" type="number" placeholder="Price" min="0" required />
+          <div class="count">
+            <span id="priceCount">0</span>
+            <span id="priceMax">/ 10</span>
+          </div>
+        </div>
+        <div id="guestbookCity">
+          <input id="city" name="city" placeholder="City" maxlength="20" />
+          <div class="count">
+            <span id="cityCount">0</span>
+            <span>/ 20</span>
+          </div>
+        </div>
+        <div id="guestbookTags">
+          <input id="tag" name="tag" id="tag" list="tags" placeholder="Tag" maxlength="20" />
+          <datalist id="tags">
+            <option value="Home">
+            <option value="Lawn">
+            <option value="Auto">
+          </datalist>
+          <div class="count">
+            <span id="tagCount">0</span>
+            <span>/ 20</span>
+          </div>
+        </div>
+        <div id="guestbookDesc">
+          <textarea name="desc" id="desc" placeholder="Description" rows="4" ,maxlength="100" required></textarea>
+          <div class="count" id="descCountID">
+            <span id="descCount">0</span>
+            <span>/ 100</span>
+          </div>
+        </div>
+        <div id="guestBookFiles">
+          <input type="file" name="filename" accept="image/*" id="formFileMultiple" onchange="preview_images(event)" multiple />
+        </div>
+        <div>
+          <button id="postSubmit" type="submit">Submit</button>
+        </div>  
+      </form>
+    </section>
+  </div>
+</div>
+<script src="static/js/new_postNEW.js"></script>
+{% endblock %}
