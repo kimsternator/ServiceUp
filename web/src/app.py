@@ -196,6 +196,37 @@ def adding_post():
     
     return 'Success'
 
+@app.route('/load_more',methods=['POST'])
+def load_more():
+    city = ""
+
+    try:
+        ip = request.remote_addr
+        print(ip)
+        city = DbIpCity.get(ip, api_key='free').city
+    except(KeyError):
+        city = "San Diego"
+
+    print(city)
+    offset = request.form['offest']
+    print(offset)
+
+    # db = mysql.connect(user=db_user, password=db_pass, host=db_host, database=db_name)
+    # cursor = db.cursor()
+    # query = (f"select id, title, description, price, tag, city, timestamp from Posts where city={city} limit 12 offset {offset};")
+    # cursor.execute(query)
+    # posts = cursor.fetchall()
+    # db.commit()
+    # db.close()
+
+    # return posts
+
+
+
+
+
+
+
 @app.route('/listing/<id>')
 def listing():
     pass
