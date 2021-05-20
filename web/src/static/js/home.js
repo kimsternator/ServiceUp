@@ -5,12 +5,32 @@ document.addEventListener("DOMContentLoaded", (event) => {
     loadMore();
   }
   var load_more = document.getElementById("load");
+  var search = document.getElementById("searchsubmit");
+  
+  var filter = false;
   
   load_more.addEventListener("click", function() {
     console.log("load_more");
     for(i = 0; i < 12; i++) {
         loadMore();
       }
+  });
+
+  search.addEventListener("click", function() {
+    console.log("search");
+    clearPosts();
+    var query = document.getElementById("searchText").value;
+    
+    if(query) {
+      filter = true;
+    }
+    else {
+      filter = false;
+    }
+    
+    for(j = 0; j < 12; j++) {
+      loadMore();
+    }
   });
   
   window.onscroll = function(ev) {
@@ -23,6 +43,13 @@ document.addEventListener("DOMContentLoaded", (event) => {
   };
   
   function loadMore() {
+    if(filter) {
+      console.log("filtering");
+    }
+    else {
+      console.log("no filtering");
+    }
+    
     var row = document.getElementById("posts");
     var col = document.createElement("div");
     var post = document.createElement("div");
@@ -65,5 +92,19 @@ document.addEventListener("DOMContentLoaded", (event) => {
   function postClicked(anId) {
     console.log(anId);
     console.log("here");
+  }
+
+  function clearPosts() {
+    var rows = document.getElementById("posts");
+    
+    while (rows.firstChild) {
+      rows.removeChild(rows.lastChild);
+    }
+  }
+  
+  var count = 1;
+  
+  for(j = 0; j < 12; j++) {
+    loadMore();
   }
 });
