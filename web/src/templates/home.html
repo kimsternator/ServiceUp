@@ -7,8 +7,16 @@
 {% endblock %}
 
 {% block content %}
-  <div class="row" id="posts">
-  </div>
+	<div class="searchBlock">
+	  <div class="search-container">
+	    <form action="javascript:void(0);">
+	      <input type="text" placeholder="Keywords or Tag..." name="search">
+	      <button type="submit">Submit</button>
+	    </form>
+	  </div>
+	</div>
+	<div class="row" id="posts">
+	</div>
 
   <img class="load_more" id="load" src="static/images/arrow.png"/>
 {% endblock %}

@@ -16,6 +16,55 @@ body {
   width: 25%;
 }
 
+.searchBlock {
+  width: 100%;
+  height: 100%;
+}
+
+.search-container {
+  display: block;
+  float: left;
+  margin-left: 5%;
+  margin-top: -5.5rem;
+  border: 4px solid #fedb6b;
+  width: 15%;
+  height: 63%;
+}
+
+.search-container button {
+  display: inline-block;
+  float: left;
+  padding: 0.3125vw;
+  background: #ddd;
+  border: none;
+  font-size: 0.8vw;
+  cursor: pointer;
+  height: 100%;
+  width: 25%;
+}
+
+.search-container button:hover {
+  background: #686868;
+}
+
+.search-container input[type=text] {
+  display: inline-block;
+  float: left;
+  padding: 0.3125vw;
+  font-size: 0.8vw;
+  border: none;
+  width: 70.5%;
+  height: 100%;
+}
+
+.search-container input:focus {
+  outline: none;
+}
+
+.search-container input:focus::placeholder {
+  color: transparent;
+}
+
 @media only screen and (max-width: 1200px) {
   .column {
     width: 33%;

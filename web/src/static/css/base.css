@@ -64,6 +64,7 @@ body {
   cursor: pointer;
   height: auto;
   width: 15%;
+  margin-right: 42%;
 }
 
 .headerBreak {
@@ -93,7 +94,7 @@ body {
   border: 3px solid transparent;
   display: inline-block;
   float: right;
-  margin-right: 1rem;
+  margin-right: 1rem; 
 }
 
 .nav img:hover {
