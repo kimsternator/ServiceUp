@@ -40,44 +40,44 @@ def home():
 
 @app.route('/login',methods = ['POST', 'GET'])
 def login():
+    print('---This is a test---') 
     if request.method == 'POST':
         token = request.form['idtoken']
         print(token)
         try:
             idinfo = id_token.verify_oauth2_token(token, requests.Request(), GOOGLE_CLIENT_ID)
-            session['idinfo'] = idinfo
-            return idinfo
-
-            ''' EXAMPLE idinfo 
-            {
-                "iss":"accounts.google.com",
-                "azp":"675774771358-d9cs6b29kg2ce9tao1l6kq0o55s76fku.apps.googleusercontent.com",
-                "aud":"675774771358-d9cs6b29kg2ce9tao1l6kq0o55s76fku.apps.googleusercontent.com",
-                "sub":"STRING",
-                "hd":"ucsd.edu",
-                "email":"valtov@ucsd.edu",
-                "email_verified":true,
-                "at_hash":"STRING",
-                "name":"Vladimir Altov",
-                "picture":"https://lh3.googleusercontent.com/a/AATXAJzcKY8n-t6GCuOc-DfyPmefcNZTjPgFWJlhYqLw=s96-c",
-                "given_name":"Vladimir",
-                "family_name":"Altov",
-                "locale":"en",
-                "iat":int,
-                "exp":int,
-                "jti":"STRING"
-            }
-            '''
-            # THIS DOESN'T WORK, SOMETHING TO DO WITH SQL, IT RETURNS A VERY VAGUE ERROR THAT LITERALLY JUST SAYS YOUR SQL HAS A SYNTAX ERROR
-            # PLEASE TEST BEFORE COMMITTING TO MASTER BRANCH
-            #
-            # db = mysql.connect(user=db_user, password=db_pass, host=db_host, database=db_name)
-            # cursor = db.cursor()
+            session['idinfo'] = idinfo 
+            
+            # here I will try to populate the users database by logging in 
+            print('------Inside Login------')
+            print(idinfo)
+            db = mysql.connect(user=db_user, password=db_pass, host=db_host, database=db_name)
+            cursor = db.cursor() 
+            
+            # This is to make sure user does not exist in the data base
+            possible_user = idinfo['email'] 
             # query = (f"select * from Users where email is {idinfo['email']}")
-            # cursor.execute(query)
-            # if len(cursor) == 0 : 
-            #     cursor.execute('INSERT INTO Users(email, name, lastName, urlToProfilePic ) VALUES (%s,%s,%s,%s)', (idinfo['email'], idinfo['given_name'], idinfo['family_name'], idinfo['picture']))
-            #     db.commit()
+            query = ("SELECT * from Users where email=%s")
+            values = (possible_user,)
+            cursor.execute(query, values)
+            response = cursor.fetchall()
+            if len(response) == 0 :
+
+                try:
+                    cursor.execute('INSERT INTO Users(email, firstName, lastName, urlToProfilePic ) VALUES (%s,%s,%s,%s)', (idinfo['email'], idinfo['given_name'], idinfo['family_name'], idinfo['picture']))
+                    db.commit()
+                except Exception as e:
+                    print(e)
+                    print('there was an error')
+
+            # Selecting Users to make sure data base works
+            cursor.execute("select * from Users;")
+            print('---------- DATABASE Users INITIALIZED ----------')
+            [print(x) for x in cursor]
+            db.close()
+
+            return 'We could now properly store a user into the database'
+            
         except ValueError:
             print('Invalid token')
             return 'invalid'
@@ -111,12 +111,19 @@ def submit_post():
         image_links.append(link)
 
     # get the user ID
-    # db = mysql.connect(user=db_user, password=db_pass, host=db_host, database=db_name)
-    # cursor = db.cursor()
-    # query = (f"select id from Users where email={session['idinfo']['email']}")
-    # cursor.execute(query)
-    # userID = cursor.fetchall()[0]
-    # db.commit()
+    db = mysql.connect(user=db_user, password=db_pass, host=db_host, database=db_name)
+    cursor = db.cursor()
+    print('-----getting userID-----')
+    finding_user = session['idinfo']['email']
+    print(finding_user)
+    #query = (f"select id from Users where email={session['idinfo']['email']}")
+    query = ("SELECT id from Users where email=%s")
+    values = (finding_user,)
+    cursor.execute(query, values)
+    #cursor.execute('SELECT id from Users where email=:contact', {'contact': finding_user})
+    userID = cursor.fetchall()[0]
+    db.commit()
+    print('----got user id----')
 
     if request.form.get('city', type=str) is None:
         ip = request.remote_addr
@@ -130,19 +137,42 @@ def submit_post():
     print(request.form)
 
     # put everything in the databases
-    # cursor = db.cursor()
-    # query = (f"insert into Posts (userID, title, description, price, tag, city) values ({userID}, {request.form.get("title", type=str)}, {request.form.get("description", type=str)}, {request.form.get("price", type=str)}, {request.form.get("tag", type=str)}, {request.form.get("city", type=str)});")
-    # cursor.execute(query)
-    # db.commit()
-    # query = (f"SELECT * FROM Table ORDER BY ID DESC LIMIT 1;")
-    # cursor.execute(query)
-    # postID = cursor.fetchall[0]
-    # image_links = [f"({postID}, {linkurl})" for linkurl in links]
-    # db.commit()
-    # query = (f"insert into Images (postID, url) values {", ".join(image_links)}")
-    # cursor.execute(query)
-    # db.commit()
-    # db.close()
+    cursor = db.cursor()
+    user = userID # seems like userID is getting returned as a tuple
+    user_value = user[0]
+
+    title = request.form.get("title", type=str)
+    description = request.form.get("desc", type=str)
+    price = request.form.get("price", type=str)
+    tag = request.form.get("tag", type=str)
+    City = request.form.get("city", type=str)
+    
+    #query = (f"insert into Posts (userID, title, description, price, tag, city) values ({userID}, {request.form.get("title", type=str)}, {request.form.get("description", type=str)}, {request.form.get("price", type=str)}, {request.form.get("tag", type=str)}, {request.form.get("city", type=str)});")
+    cursor.execute('INSERT INTO Posts (userID, title, description, price, tag, city) VALUES (%s,%s,%s,%s,%s,%s)', (user_value, title, description, price, tag, City))
+    db.commit()
+
+    # Selecting Posts to make sure data base works
+    cursor.execute("select * from Posts;")
+    print('---------- DATABASE POSTS INITIALIZED ----------')
+    [print(x) for x in cursor]
+
+    query = (f"SELECT * FROM Posts ORDER BY ID DESC LIMIT 1;")
+    cursor.execute(query)
+    postID = cursor.fetchall()[0] # not sure if you guys meant to fetchone, you previously had fetchall[0] which was giving an error.
+    #image_links = [f"({postID}, {linkurl})" for linkurl in image_links]
+    db.commit()
+
+    the_id = postID[0]
+    the_url = image_links[0]
+    # #query = (f"insert into Images (postID, url) values {", ".join(image_links)}")
+    cursor.execute('INSERT into Images (postID, url_link) VALUES (%s,%s)' , (the_id, the_url))
+    db.commit()
+
+    # Selecting Images to make sure data base works
+    cursor.execute("select * from Images;")
+    print('---------- DATABASE Images INITIALIZED ----------')
+    [print(x) for x in cursor]
+    db.close()
     
     return f'IM THINKING THIS SHOULD REDIRECT TO A PAGE WITH A LINK TO THE POST THEY JUST CREATED: {link}'
 

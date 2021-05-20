@@ -19,19 +19,21 @@ cursor = db.cursor()
 # I'LL LEAVE THIS FOR NOW FOR TESTING PURPOSES, DELETE LATER!!
 cursor.execute("drop table if exists Posts;")
 cursor.execute("drop table if exists Users;")
-cursor.execute("drop table if exists Messages;")
+cursor.execute("drop table if exists Images;")
+# cursor.execute("drop table if exists Messages;")
 
 # Create a TStudents table (wrapping it in a try-except is good practice)
 try:
   cursor.execute("""
     CREATE TABLE Posts (
-    id              integer AUTO_INCREMENT PRIMARY KEY,
+    id              int AUTO_INCREMENT PRIMARY KEY,
     userID          INT NOT NULL, 
-    service_type    VARCHAR (20) NOT NULL,
-    who             VARCHAR (20) NOT NULL,
-    available       VARCHAR (20) NOT NULL,
-    compensation    VARCHAR (20) NOT NULL,
-    info            TINYTEXT NOT NULL
+    title           VARCHAR (50) NOT NULL,
+    description     TINYTEXT NOT NULL,
+    price           VARCHAR (50) NOT NULL,
+    tag             VARCHAR (50) NOT NULL,
+    city            VARCHAR (50) NOT NULL,
+    created_at      TIMESTAMP 
   );
   """)
 except Exception as e:
@@ -41,31 +43,44 @@ except Exception as e:
 try: 
   cursor.execute("""
     CREATE TABLE Users ( 
-      id                integer AUTO_INCREMENT PRIMARY KEY,
-      email             VARCHAR (20) NOT NULL,
-      name              VARCHAR (20) NOT NULL,
-      lastName          VARCHAR (20) NOT NULL,
-      urlToProfilePic   TEXT NOT NULL
+      id                int AUTO_INCREMENT PRIMARY KEY,
+      email             VARCHAR (50) NOT NULL,
+      firstName         VARCHAR (50) NOT NULL,
+      lastName          VARCHAR (50) NOT NULL,
+      urlToProfilePic   TINYTEXT NOT NULL
    );
   """)
 except Exception as e:
   print(e)
   print("Users table already exists. Not recreating it.")
 
+
 try: 
   cursor.execute("""
-    CREATE TABLE Messages (
-     index                integer AUTO_INCREMENT PRIMARY KEY,
-     created_at           TEXT NOT NULL,
-     message              TEXT NOT NULL,
-     receiverUserID       int NOT NULL,
-     senderUserID         int NOT NULL
-    );   
+    CREATE TABLE Images ( 
+      id                int AUTO_INCREMENT PRIMARY KEY,
+      postID            INT NOT NULL,
+      url_link          TINYTEXT NOT NULL
+   );
   """)
-
 except Exception as e:
   print(e)
-  print("Messages table already exists. Not recreating it.")
+  print("Images table already exists. Not recreating it.")
+
+# try: 
+#   cursor.execute("""
+#     CREATE TABLE Messages (
+#      index                integer AUTO_INCREMENT PRIMARY KEY,
+#      created_at           TEXT NOT NULL,
+#      message              TEXT NOT NULL,
+#      receiverUserID       int NOT NULL,
+#      senderUserID         int NOT NULL
+#     );   
+#   """)
+
+# except Exception as e:
+#   print(e)
+#   print("Messages table already exists. Not recreating it.")
 
 
 
