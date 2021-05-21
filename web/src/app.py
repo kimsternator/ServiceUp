@@ -189,6 +189,10 @@ def post():
 def new_post():
     return render_template('new_postNEW.html')
 
+@app.route('/messaging')
+def messaging():
+    return render_template('messaging.html')
+
 @app.route("/terms_of_service")
 def terms_of_service():
     return render_template('tos.html')

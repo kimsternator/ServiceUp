@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block head %}
+  {{ super() }}
+  <link rel="stylesheet" type="text/css" href="static/css/home.css">
+  <script src="static/js/home.js"></script>
+{% endblock %}
+
+{% block content %}
+   <h1>Messaging </h1> 
+	<div class="searchBlock">
+	  <div class="search-container">
+	    <form action="javascript:void(0);">
+	      <input type="text" id="searchText" placeholder="Keywords or Tag..." name="search">
+	      <button type="submit" id="searchsubmit">Submit</button>
+	    </form>
+	  </div>
+	</div>
+	<div class="row" id="posts">
+	</div>
+
+  <img class="load_more" id="load" src="static/images/arrow.png"/>
+{% endblock %}

@@ -31,3 +31,9 @@ from flask_socketio import SocketIO
 #SECURITY CHECKS
 #json request id match senderid
 #make sure sender/receiver exists 
+db = mysql.connect(host=db_host, database=db_name, user=db_user, passwd=db_pass)
+  cursor = db.cursor()
+  cursor.execute("""SELECT googleID, userID, receiverID, senderID,
+    FROM Users, Posts, Messages,
+    Where Users.googleID = Messages.senderID, LIMIT 0,30
+    """ )

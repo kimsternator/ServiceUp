@@ -82,6 +82,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     
     messaging.addEventListener("click", function() {
       console.log("messaging");
+      window.location = (base_link + 'messaging');
     });
     
     setting.addEventListener("click", function() {
