@@ -8,5 +8,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
   
   messageUser.addEventListener("click", function() {
     console.log("messageUser");
+    window.location = (base_link + 'messageuser');
   });
 });

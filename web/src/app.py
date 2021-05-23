@@ -191,7 +191,11 @@ def new_post():
 
 @app.route('/messaging')
 def messaging():
-    return render_template('messaging.html')
+    return render_template('chat.html')
+
+@app.route('/messageuser')
+def messageUser():
+    return render_template('messageUser.html')
 
 @app.route("/terms_of_service")
 def terms_of_service():
@@ -269,7 +273,28 @@ def listing():
 def favicon(): 
     return send_from_directory(os.path.join(app.root_path, 'static/images'), 'favicon.png', mimetype='image/vnd.microsoft.icon')
 
+
+####################
+
+from flask import jsonify
+from flask_socketio import SocketIO, emit
+
+# app = Flask(__name__, template_folder='templates', static_url_path='/static/', static_folder='static')
+# app.config['SECRET_KEY'] = 'ines'
+socketio = SocketIO(app)
+
+@socketio.on('connected')
+def conn(msg):
+	return {'data':'Ok'}
+
+@socketio.on('client_message')
+def receive_message(data):
+	emit('server_message', data, broadcast=True)
+
+
+#######################
 if __name__ == '__main__':
     # app.run(debug=True)
+    socketio.run(app, debug=True, port = 6004, host ='0.0.0.0' ) #trial
     server = make_server('0.0.0.0', 6004, app)
     server.serve_forever()
