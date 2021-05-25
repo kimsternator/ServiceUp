@@ -34,6 +34,23 @@ def database():
   db.close()
   return records
 
+@app.route('/get_main_posts/<offset>', methods=['GET'])
+def get_main_posts(offset):
+    db = mysql.connect(host=db_host, database=db_name, user=db_user, passwd=db_pass)
+    cursor = db.cursor()
+    # get the posts
+    cursor.execute(f"select id, title, created_at from Posts limit {offset}, 12;")
+    records = cursor.fetchall()
+    db.commit()
+    thePosts = []
+    
+    for post in records:
+        cursor.execute(f"select url_link from Images where postID={post[0]} limit 1;")
+        url = cursor.fetchall()[0]
+        thePosts.append({"id": post[0], "title": post[1], "image_url": url})
+
+    return {"posts": thePosts}
+
 @app.route('/')
 def home():
     return render_template('home.html')
@@ -207,7 +224,7 @@ def submit_post():
     [print(x) for x in cursor]
     db.close()
     
-    return f'IM THINKING THIS SHOULD REDIRECT TO A PAGE WITH A LINK TO THE POST THEY JUST CREATED: {link}'
+    return redirect('/listing/?id=' + str(the_id))
 
 @app.route('/profile')
 def profile():
