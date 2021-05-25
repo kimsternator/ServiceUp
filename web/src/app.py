@@ -43,7 +43,7 @@ def get_main_posts(offset):
     records = cursor.fetchall()
     db.commit()
     thePosts = []
-    
+
     for post in records:
         cursor.execute(f"select url_link from Images where postID={post[0]} limit 1;")
         url = cursor.fetchall()[0]
@@ -224,7 +224,7 @@ def submit_post():
     [print(x) for x in cursor]
     db.close()
     
-    return redirect('/listing/?id=' + str(the_id))
+    return redirect('/listing?id=' + str(the_id))
 
 @app.route('/profile')
 def profile():

@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
           theId = event.target.parentNode.id;
         }
 
-        window.location = (base_link + 'listing/?id=' + String(theId));
+        window.location = (base_link + 'listing?id=' + String(theId));
       });
 
       col.appendChild(post);
