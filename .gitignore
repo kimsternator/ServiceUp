@@ -5,3 +5,4 @@ db
 my_env
 .idea
 key.json
+credentials.env

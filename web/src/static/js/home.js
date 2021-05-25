@@ -82,7 +82,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     
     post.addEventListener('click', event => {
       console.log(post.id);
-      window.location = (base_link + '/post');
+      window.location = (base_link + 'listing?id='+post.id);
     });
     
     col.appendChild(post);

@@ -67,20 +67,20 @@ except Exception as e:
   print(e)
   print("Images table already exists. Not recreating it.")
 
-try: 
-  cursor.exucute("""
-    CREATE TABLE IF NOT EXISTS Messages (
-     index int AUTO_INCREMENT PRIMARY KEY,
-     date TEXT NOT NULL,
-     message TEXT NOT NULL,
-     receiverUserID int NOT NULL,
-     senderUserID int NOT NULL
-    );   
-  """)
+# try: 
+#   cursor.execute("""
+#     CREATE TABLE IF NOT EXISTS Messages (
+#      index int AUTO_INCREMENT PRIMARY KEY,
+#      date TEXT NOT NULL,
+#      message TEXT NOT NULL,
+#      receiverUserID int NOT NULL,
+#      senderUserID int NOT NULL
+#     );   
+#   """)
 
-except Exception as e:
-  print(e)
-  print("Messages table already exists. Not recreating it.")
+# except Exception as e:
+#   print(e)
+#   print("Messages table already exists. Not recreating it.")
 
 
 

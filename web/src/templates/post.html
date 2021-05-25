@@ -2,32 +2,32 @@
 
 {% block head %}
   {{ super() }}
-  <link rel="stylesheet" type="text/css" href="static/css/post.css">
+  <link rel="stylesheet" type="text/css" href="../static/css/post.css">
   <script src="static/js/post.js"></script>
 {% endblock %}
 
 {% block content %}
         <div class="post">
-          <div class="title">Title</div>
+          <div class="title">{{ data['post_data']['title'] }}</div>
           <div class="row">
             <div class="column">
-              <img class="image" src="https://images-na.ssl-images-amazon.com/images/I/615%2BvEiuEEL._AC_SL1226_.jpg"/>
+              <img class="image" src="{{ data['image_data']['url_link'] }}"/>
             </div>
             <div class="column">
               <div id="service">Service
-                <div id="serviceBody" class="postBody">Body</div>
+                <div id="serviceBody" class="postBody">{{ data['post_data']['title'] }}</div>
               </div>
               <div id="who">Who
-                <div id="serviceBody" class="postBody">Body</div>
+                <div id="serviceBody" class="postBody">{{ data['user_data']['first_name'] }}</div>
               </div>
               <div id="when">When
-                <div id="serviceBody" class="postBody">Body</div>
+                <div id="serviceBody" class="postBody">{{ data['post_data']['createdAt'] }}</div>
               </div>
               <div id="much">How Much
-                <div id="serviceBody" class="postBody">Body</div>
+                <div id="serviceBody" class="postBody">{{ data['post_data']['price'] }}</div>
               </div>
               <div id="description">Description
-                <div id="serviceBody" class="postBody">Body</div>
+                <div id="serviceBody" class="postBody">{{ data['post_data']['description'] }}</div>
               </div>
             </div>
           </div>

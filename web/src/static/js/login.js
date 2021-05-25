@@ -14,6 +14,7 @@ function onSignIn(googleUser) {
   xhr.open('POST', login_url);
   xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
   xhr.onload = function() {
+    console.log(xhr.responseText);
     google_info = JSON.parse(xhr.responseText);
     console.log('Signed in as: ' + google_info['picture']);
 

@@ -38,6 +38,39 @@ def database():
 def home():
     return render_template('home.html')
 
+def convert_json(record, rest):
+    d = {}
+    for i, field in enumerate(rest):
+        d[field] = record[0][i]
+    return d
+
+@app.route('/listing')
+def listing():
+    id = request.args.get('id')
+    print(id)
+    if id == None:
+        return redirect('/')
+    db = mysql.connect(host=db_host, database=db_name, user=db_user, passwd=db_pass)
+    cursor = db.cursor()
+    cursor.execute(f"select * from Posts where id = {id};")
+    temp1 = cursor.fetchall()
+    print(temp1)
+    user_id = temp1[0][1]
+    cursor.execute(f"select * from Users where id = {user_id};")
+    temp2 = cursor.fetchall()
+    print(temp2)
+    cursor.execute(f"select * from Images where id = {temp1[0][1]};")
+    temp3 = cursor.fetchall()
+    db.close()
+    arr1 = convert_json(temp1, ['id', 'userID', 'title', 'description', 'price', 'tag', 'city', 'createdAt'])
+    arr2 = convert_json(temp2, ['id', 'email', 'first_name', 'last_name', 'picture'])
+    arr3 = convert_json(temp3, ['id', 'postID', 'url_link'])
+
+    print(arr1)
+    print(arr2)
+    # , {"picture":temp2[0][4], 'Service':}
+    return render_template('post.html', data={'post_data':arr1, 'user_data':arr2, 'image_data':arr3})
+
 @app.route('/login',methods = ['POST', 'GET'])
 def login():
     print('---This is a test---') 
@@ -76,7 +109,7 @@ def login():
             [print(x) for x in cursor]
             db.close()
 
-            return 'We could now properly store a user into the database'
+            return idinfo
             
         except ValueError:
             print('Invalid token')
@@ -258,16 +291,6 @@ def load_more():
     # db.close()
 
     # return posts
-
-
-
-
-
-
-
-@app.route('/listing/<id>')
-def listing():
-    pass
 
 @app.route('/favicon.ico') 
 def favicon(): 
