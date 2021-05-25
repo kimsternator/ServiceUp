@@ -33,7 +33,7 @@ try:
     price           VARCHAR (50) NOT NULL,
     tag             VARCHAR (50) NOT NULL,
     city            VARCHAR (50) NOT NULL,
-    created_at      TIMESTAMP 
+    created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP
   );
   """)
 except Exception as e:
