@@ -30,6 +30,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
     for(i = 0; i < posts.length; i++) {
       var thePost = posts[i];
+      offset++;
 
       var row = document.getElementById("posts");
       var col = document.createElement("div");
@@ -48,7 +49,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
       pic.src = thePost["image_url"];
       title.innerHTML = thePost["title"];
-      where.innerHTML = "San Diego, CA";
+      where.innerHTML = thePost["city"];
       time.innerHTML = thePost["elapsed"] + " hrs ago";
       post.id = thePost["id"];
       post.appendChild(pic);
@@ -71,6 +72,14 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
       col.appendChild(post);
       row.appendChild(col);
+    }
+
+    if(offset == 0) {
+        document.getElementById("noResults").style.visibility = "visible";
+    } 
+
+    if(offset < 11) {
+      document.getElementById("load").style.visibility = "hidden";
     }
   }
 

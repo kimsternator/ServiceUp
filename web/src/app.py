@@ -26,6 +26,7 @@ db_host = os.environ['MYSQL_HOST']
 app = Flask(__name__)
 app.secret_key = 'thissecretisrequired'
 
+
 @app.route('/database')
 def database():
   # Connect to the database and retrieve the users
@@ -36,21 +37,25 @@ def database():
   db.close()
   return records
 
+
 @app.route('/get_main_posts/<offset>', methods=['GET'])
 def get_main_posts(offset):
     db = mysql.connect(host=db_host, database=db_name, user=db_user, passwd=db_pass)
     cursor = db.cursor()
     # get the posts
-    cursor.execute(f"select id, title, created_at from Posts limit {offset}, 12;")
+    cursor.execute(f"select id, title, created_at, city from Posts limit {offset}, 12;")
     records = cursor.fetchall()
     db.commit()
     thePosts = []
-    now = datetime.datetime.now()
 
     for post in records:
         cursor.execute(f"select url_link from Images where postID={post[0]} limit 1;")
         url = cursor.fetchall()[0]
-        thePosts.append({"id": post[0], "title": post[1], "image_url": url, "elapsed": get_hours(post[2])})
+        thePosts.append({"id": post[0],
+                         "title": post[1],
+                         "image_url": url,
+                         "elapsed": get_hours(post[2]),
+                         "city": post[3]})
 
     return {"posts": thePosts}
 
@@ -65,6 +70,7 @@ def get_hours(then):
         hours = hours if hours <= 24 else ">24"
 
     return hours
+
 
 @app.route('/')
 def home():
@@ -278,13 +284,15 @@ def get_filter(offset, filter):
     db.commit()
     print(records)
     filtered_records = []
-    now = datetime.datetime.now()
 
     for post in records:
         if any(filter.lower() in str(string).lower() for string in post):
             cursor.execute(f"select url_link from Images where postID={post[0]} limit 1;")
             url = cursor.fetchall()[0]
-            filtered_records.append({"id": post[0], "title": post[1], "image_url": url, "elapsed": get_hours(post[2])})
+            filtered_records.append({"id": post[0], "title": post[1],
+                                     "image_url": url,
+                                     "elapsed": get_hours(post[2]),
+                                     "city": post[3]})
 
     db.close()
 

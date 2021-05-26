@@ -144,5 +144,14 @@ body {
 }
 
 .load_more:hover {
-  background-color: green;
+  background-color: #828282;
+}
+
+#noResults {
+  position: absolute;
+  top: 20%;
+  left: 45%;
+  visibility: hidden;
+  text-align: center;
+  margin: auto;
 }
