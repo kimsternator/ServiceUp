@@ -1,12 +1,10 @@
 document.addEventListener("DOMContentLoaded", (event) => {
   var offset = 0;
-  var dataURL = "http://localhost:6004/get_main_posts/";
+  var dataURL = "http://localhost:6004/get_filter/";
   
   loadMore();
   var load_more = document.getElementById("load");
   var search = document.getElementById("searchsubmit");
-  
-  var filter = false;
   
   load_more.addEventListener("click", function() {
     console.log("load_more");
@@ -28,10 +26,10 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
   function update(data) {
     var posts = data["posts"];
+    console.log(data);
 
     for(i = 0; i < posts.length; i++) {
       var thePost = posts[i];
-      offset++;
 
       var row = document.getElementById("posts");
       var col = document.createElement("div");
@@ -81,7 +79,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
   } 
 
   function loadMore() {
-	  fetch(dataURL + String(offset))
+    var theFilterReq = document.getElementById("filter").innerHTML;
+
+	  fetch(dataURL + String(offset) + "/" + theFilterReq.substring(23))
 	    .then(response=>response.json())
 	    .then(update)
 	    .catch(showError)

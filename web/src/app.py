@@ -8,6 +8,7 @@ import os
 
 import google_storage as uploader
 import hashlib
+import datetime
 import time
 import json
 
@@ -44,13 +45,26 @@ def get_main_posts(offset):
     records = cursor.fetchall()
     db.commit()
     thePosts = []
+    now = datetime.datetime.now()
 
     for post in records:
         cursor.execute(f"select url_link from Images where postID={post[0]} limit 1;")
         url = cursor.fetchall()[0]
-        thePosts.append({"id": post[0], "title": post[1], "image_url": url})
+        thePosts.append({"id": post[0], "title": post[1], "image_url": url, "elapsed": get_hours(post[2])})
 
     return {"posts": thePosts}
+
+
+def get_hours(then):
+    now = datetime.datetime.now()
+    hours = (now - then).total_seconds() // 360
+
+    if hours < 1:
+        hours = "<1"
+    else:
+        hours = hours if hours <= 24 else ">24"
+
+    return hours
 
 @app.route('/')
 def home():
@@ -68,7 +82,7 @@ def convert_json(record, rest):
 def search():
     filter = request.args.get('filter')
     print(filter)
-    if filter == None:
+    if filter == "":
         return redirect('/')
     filter = {"filter": filter}
 
@@ -240,9 +254,10 @@ def submit_post():
     
     return redirect('/listing?id=' + str(the_id))
 
-@app.route("/get_filter")
-def get_filter():
-    filter = request.args.get('filter')
+@app.route("/get_filter/<offset>/<filter>")
+def get_filter(offset, filter):
+    # filter = request.args.get('filter')
+    print(offset)
     print(filter)
 
     if filter == None:
@@ -256,16 +271,26 @@ def get_filter():
         city = "San Diego"
 
     print(city)
-    # db = mysql.connect(host=db_host, database=db_name, user=db_user, passwd=db_pass)
-    # cursor = db.cursor()
-    # cursor.execute(f"select * from Posts where city={city};")
-    # records = cursor.fetchall()
-    records = {}
+    db = mysql.connect(host=db_host, database=db_name, user=db_user, passwd=db_pass)
+    cursor = db.cursor()
+    cursor.execute(f"select id, title, created_at, description, tag, city from Posts;")
+    records = cursor.fetchall()
+    db.commit()
+    print(records)
+    filtered_records = []
+    now = datetime.datetime.now()
 
-    response = Response(body=json.dumps(records))
-    response.headers.update({'Access-Control-Allow-Origin': '*', })
+    for post in records:
+        if any(filter.lower() in str(string).lower() for string in post):
+            cursor.execute(f"select url_link from Images where postID={post[0]} limit 1;")
+            url = cursor.fetchall()[0]
+            filtered_records.append({"id": post[0], "title": post[1], "image_url": url, "elapsed": get_hours(post[2])})
 
-    return response
+    db.close()
+
+    records = {"posts": filtered_records}
+
+    return records
 
 @app.route('/profile')
 def profile():
