@@ -1,5 +1,5 @@
-from wsgiref.simple_server import make_server
-from flask import Flask, session, render_template, request, redirect, send_from_directory
+import bjoern
+from flask import Flask, session, render_template, request, redirect, send_from_directory, Response
 from google.oauth2 import id_token
 from google.auth.transport import requests
 
@@ -9,6 +9,7 @@ import os
 import google_storage as uploader
 import hashlib
 import time
+import json
 
 from ip2geotools.databases.noncommercial import DbIpCity
 
@@ -55,11 +56,24 @@ def get_main_posts(offset):
 def home():
     return render_template('home.html')
 
+
 def convert_json(record, rest):
     d = {}
     for i, field in enumerate(rest):
         d[field] = record[0][i]
     return d
+
+
+@app.route('/search')
+def search():
+    filter = request.args.get('filter')
+    print(filter)
+    if filter == None:
+        return redirect('/')
+    filter = {"filter": filter}
+
+    return render_template('search.html', **filter)
+
 
 @app.route('/listing')
 def listing():
@@ -226,6 +240,33 @@ def submit_post():
     
     return redirect('/listing?id=' + str(the_id))
 
+@app.route("/get_filter")
+def get_filter():
+    filter = request.args.get('filter')
+    print(filter)
+
+    if filter == None:
+        return redirect('/')
+
+    try:
+        ip = request.remote_addr
+        print(ip)
+        city = DbIpCity.get(ip, api_key='free').city
+    except KeyError:
+        city = "San Diego"
+
+    print(city)
+    # db = mysql.connect(host=db_host, database=db_name, user=db_user, passwd=db_pass)
+    # cursor = db.cursor()
+    # cursor.execute(f"select * from Posts where city={city};")
+    # records = cursor.fetchall()
+    records = {}
+
+    response = Response(body=json.dumps(records))
+    response.headers.update({'Access-Control-Allow-Origin': '*', })
+
+    return response
+
 @app.route('/profile')
 def profile():
     #TODO: profile_data = retrieve_profile_data_somehow(session['idinfo'])
@@ -292,22 +333,22 @@ def load_more():
         ip = request.remote_addr
         print(ip)
         city = DbIpCity.get(ip, api_key='free').city
-    except(KeyError):
+    except KeyError:
         city = "San Diego"
 
     print(city)
     offset = request.form['offest']
     print(offset)
 
-    # db = mysql.connect(user=db_user, password=db_pass, host=db_host, database=db_name)
-    # cursor = db.cursor()
-    # query = (f"select id, title, description, price, tag, city, timestamp from Posts where city={city} limit 12 offset {offset};")
-    # cursor.execute(query)
-    # posts = cursor.fetchall()
-    # db.commit()
-    # db.close()
+    db = mysql.connect(user=db_user, password=db_pass, host=db_host, database=db_name)
+    cursor = db.cursor()
+    query = (f"select id, title, description, price, tag, city, timestamp from Posts where city={city} limit 12 offset {offset};")
+    cursor.execute(query)
+    posts = cursor.fetchall()
+    db.commit()
+    db.close()
 
-    # return posts
+    return posts
 
 @app.route('/favicon.ico') 
 def favicon(): 
@@ -335,6 +376,5 @@ def receive_message(data):
 #######################
 if __name__ == '__main__':
     # app.run(debug=True)
-    socketio.run(app, debug=True, port = 6004, host ='0.0.0.0' ) #trial
-    server = make_server('0.0.0.0', 6004, app)
-    server.serve_forever()
+    socketio.run(app, debug=True, port=6004, host='0.0.0.0' ) #trial
+    bjoern.run(app, '0.0.0.0', 6004)

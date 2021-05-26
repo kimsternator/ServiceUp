@@ -5,6 +5,7 @@ requests==2.22.0
 requests-file==1.4.3
 requests-unixsocket==0.2.0
 mysql-connector-python
+bjoern
 python-dotenv
 google-cloud-storage
 ip2geotools

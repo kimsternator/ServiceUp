@@ -16,17 +16,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
   search.addEventListener("click", function() {
     console.log("search");
-    clearPosts();
     var query = document.getElementById("searchText").value;
-    
-    if(query) {
-      filter = true;
-    }
-    else {
-      filter = false;
-    }
-    
-    loadMore();
+    window.location.href = "/search?filter=" + query;
   });
   
   window.onscroll = function(ev) {
@@ -105,14 +96,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
   function postClicked(anId) {
     console.log(anId);
     console.log("here");
-  }
-
-  function clearPosts() {
-    var rows = document.getElementById("posts");
-    
-    while (rows.firstChild) {
-      rows.removeChild(rows.lastChild);
-    }
   }
   
   var count = 1;
