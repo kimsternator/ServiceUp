@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     sign_inout.addEventListener("click", function() {
       if(sign.innerHTML == "Sign In") {
         console.log("sign_in");
-        window.location = (base_link + 'login');
+        modal.style.display = "block";
       }
       else {
         console.log("sign_out");
@@ -117,7 +117,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
   
   function signOut() {
     logout_url = base_link + 'logout'
-  
+    authInstance = gapi.auth2.getAuthInstance();
+    console.log(authInstance)
+    authInstance.signOut()
     var xhr = new XMLHttpRequest();
     xhr.open('GET', logout_url);
     xhr.onload = function() {
@@ -130,3 +132,53 @@ document.addEventListener("DOMContentLoaded", (event) => {
     xhr.send();
   }
 });
+
+function init(){
+  console.log('Init success')
+  gapi.load('auth2', function() {
+    gapi.auth2.init().then(() => {  })
+  });
+}
+
+function onSignIn(googleUser) {
+  var profile = googleUser.getBasicProfile();
+  console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+  console.log('Name: ' + profile.getName());
+  console.log('Image URL: ' + profile.getImageUrl());
+  console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+
+  var id_token = googleUser.getAuthResponse().id_token;
+  login_url = base_link + 'login'
+
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', login_url);
+  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+  xhr.onload = function() {
+    console.log(xhr.responseText);
+    google_info = JSON.parse(xhr.responseText);
+    console.log('Signed in as: ' + google_info['picture']);
+
+    var temp = `picture=${google_info['picture']}`
+    document.cookie = temp;
+    console.log(temp)
+    console.log(document.cookie)
+
+    temp = `email=${google_info['email']}`;
+    document.cookie = temp;
+    console.log(temp)
+    console.log(document.cookie)
+
+    temp = `name=${google_info['name']}`;
+    document.cookie = temp;
+    console.log(temp)
+    console.log(document.cookie)
+
+    temp = `email=${google_info['email']}`;
+    document.cookie = temp;
+    console.log(temp)
+    console.log(document.cookie)
+
+    window.location = (base_link);
+  };
+  xhr.send('idtoken=' + id_token);
+}

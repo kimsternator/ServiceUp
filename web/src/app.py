@@ -48,6 +48,7 @@ def get_main_posts(offset):
     db.commit()
     thePosts = []
 
+    print(records)
     for post in records:
         cursor.execute(f"select url_link from Images where postID={post[0]} limit 1;")
         url = cursor.fetchall()[0]
@@ -61,6 +62,8 @@ def get_main_posts(offset):
 
 
 def get_hours(then):
+    if then is None:
+        return "?"
     now = datetime.datetime.now()
     hours = (now - then).total_seconds() // 360
 
@@ -122,57 +125,53 @@ def listing():
     # , {"picture":temp2[0][4], 'Service':}
     return render_template('post.html', data={'post_data':arr1, 'user_data':arr2, 'image_data':arr3})
 
-@app.route('/login',methods = ['POST', 'GET'])
+@app.route('/login',methods = ['POST'])
 def login():
     print('---This is a test---') 
-    if request.method == 'POST':
-        token = request.form['idtoken']
-        print(token)
-        try:
-            idinfo = id_token.verify_oauth2_token(token, requests.Request(), GOOGLE_CLIENT_ID)
-            session['idinfo'] = idinfo 
-            
-            # here I will try to populate the users database by logging in 
-            print('------Inside Login------')
-            print(idinfo)
-            db = mysql.connect(user=db_user, password=db_pass, host=db_host, database=db_name)
-            cursor = db.cursor() 
-            
-            # This is to make sure user does not exist in the data base
-            possible_user = idinfo['email'] 
-            # query = (f"select * from Users where email is {idinfo['email']}")
-            query = ("SELECT * from Users where email=%s")
-            values = (possible_user,)
-            cursor.execute(query, values)
-            response = cursor.fetchall()
-            if len(response) == 0 :
+    token = request.form['idtoken']
+    print(token)
+    try:
+        idinfo = id_token.verify_oauth2_token(token, requests.Request(), GOOGLE_CLIENT_ID)
+        session['idinfo'] = idinfo 
+        
+        # here I will try to populate the users database by logging in 
+        print('------Inside Login------')
+        print(idinfo)
+        db = mysql.connect(user=db_user, password=db_pass, host=db_host, database=db_name)
+        cursor = db.cursor() 
+        
+        # This is to make sure user does not exist in the data base
+        possible_user = idinfo['email'] 
+        # query = (f"select * from Users where email is {idinfo['email']}")
+        query = ("SELECT * from Users where email=%s")
+        values = (possible_user,)
+        cursor.execute(query, values)
+        response = cursor.fetchall()
+        if len(response) == 0 :
+            try:
+                cursor.execute('INSERT INTO Users(email, firstName, lastName, urlToProfilePic ) VALUES (%s,%s,%s,%s)', (idinfo['email'], idinfo['given_name'], idinfo['family_name'], idinfo['picture']))
+                db.commit()
+            except Exception as e:
+                print(e)
+                print('there was an error')
 
-                try:
-                    cursor.execute('INSERT INTO Users(email, firstName, lastName, urlToProfilePic ) VALUES (%s,%s,%s,%s)', (idinfo['email'], idinfo['given_name'], idinfo['family_name'], idinfo['picture']))
-                    db.commit()
-                except Exception as e:
-                    print(e)
-                    print('there was an error')
+        # Selecting Users to make sure data base works
+        cursor.execute("select * from Users;")
+        print('---------- DATABASE Users INITIALIZED ----------')
+        [print(x) for x in cursor]
+        db.close()
 
-            # Selecting Users to make sure data base works
-            cursor.execute("select * from Users;")
-            print('---------- DATABASE Users INITIALIZED ----------')
-            [print(x) for x in cursor]
-            db.close()
-
-            return idinfo
-            
-        except ValueError:
-            print('Invalid token')
-            return 'invalid'
-    else:
-        return render_template('login.html')
+        return idinfo
+        
+    except ValueError:
+        print('Invalid token')
+        return 'invalid token'
 
 @app.route('/logout')
 def logout():
+    email = session['idinfo']['email']
     session.clear()
-    return redirect('/')
-
+    return email
 
 @app.route('/submit_post', methods=['POST'])
 def submit_post():
