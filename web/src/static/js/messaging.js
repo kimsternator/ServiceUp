@@ -1,5 +1,8 @@
+var getUrl = window.location;
+var baseUrl = getUrl .protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
+
 function updateMessages(){
-    fetch("http://localhost:6004/get_messages", {
+    fetch(baseUrl + "/get_messages", {
       method: "GET",
       headers: { "Content-Type": "application/json" }
     })

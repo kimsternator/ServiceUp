@@ -1,6 +1,10 @@
+var getUrl = window.location;
+var baseUrl = getUrl .protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
+
 document.addEventListener("DOMContentLoaded", (event) => {
   var offset = 0;
-  var dataURL = "http://localhost:6004/get_filter/";
+  var dataURL = baseUrl + "/get_filter/";
+  // var dataURL = "http://localhost:6004/get_filter/";
   
   loadMore();
   var load_more = document.getElementById("load");
