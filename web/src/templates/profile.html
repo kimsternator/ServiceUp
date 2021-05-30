@@ -3,16 +3,19 @@
 {% block head %}
   {{ super() }}
   <link rel="stylesheet" type="text/css" href="static/css/profile.css">
+  <link rel="stylesheet" type="text/css" href="static/css/home.css">
   <script src="static/js/profile.js"></script>
 {% endblock %}
 
 {% block content %}
   <br>
-  <div class="user">
-    <img id="picture" src="./static/images/profile.jpg"/>
-    <p id="name">Name</p>
-    <p id="trust-factor">15000 pts</p>
-    <p id="since">Member since 1968</p>
+  <div id="user" class="user">
+    <img id="picture" src="{{ data[4] }}"/>
+    <p id="name">{{data[2] + ' ' + data[3]}}</p>
+  </div>
+  <br>
+
+  <div class="row" id="posts">
   </div>
 
   <div class="bottomNav">

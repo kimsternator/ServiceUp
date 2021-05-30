@@ -21,14 +21,11 @@ db_pass = os.environ['MYSQL_PASSWORD']
 db_name = os.environ['MYSQL_DATABASE']
 db_host = os.environ['MYSQL_HOST']
 
-# clientSecret: IQvNBGE53RwdJi3n32nABTmc
-
 app = Flask(__name__)
 app.secret_key = 'thissecretisrequired'
 
-
-@app.route('/database')
-def database():
+@app.route('/database_test')
+def database_test():
   # Connect to the database and retrieve the users
   db = mysql.connect(host=db_host, database=db_name, user=db_user, passwd=db_pass)
   cursor = db.cursor()
@@ -36,7 +33,6 @@ def database():
   records = cursor.fetchall()
   db.close()
   return records
-
 
 @app.route('/get_main_posts/<offset>', methods=['GET'])
 def get_main_posts(offset):
@@ -74,18 +70,15 @@ def get_hours(then):
 
     return hours
 
-
 @app.route('/')
 def home():
     return render_template('home.html')
-
 
 def convert_json(record, rest):
     d = {}
     for i, field in enumerate(rest):
         d[field] = record[0][i]
     return d
-
 
 @app.route('/search')
 def search():
@@ -96,7 +89,6 @@ def search():
     filter = {"filter": filter}
 
     return render_template('search.html', **filter)
-
 
 @app.route('/listing')
 def listing():
@@ -113,7 +105,7 @@ def listing():
     cursor.execute(f"select * from Users where id = {user_id};")
     temp2 = cursor.fetchall()
     print(temp2)
-    cursor.execute(f"select * from Images where id = {temp1[0][1]};")
+    cursor.execute(f"select * from Images where postID = {temp1[0][0]};")
     temp3 = cursor.fetchall()
     db.close()
     arr1 = convert_json(temp1, ['id', 'userID', 'title', 'description', 'price', 'tag', 'city', 'createdAt'])
@@ -299,10 +291,83 @@ def get_filter(offset, filter):
 
     return records
 
+# Renders the custom user profile if logged in, redirects to home otherwise
 @app.route('/profile')
 def profile():
-    #TODO: profile_data = retrieve_profile_data_somehow(session['idinfo'])
-    return render_template('profile.html')
+    if 'idinfo' not in session:
+        return redirect('/')
+    email = session['idinfo']['email']
+    print(email)
+    user = database(f'select * from Users where email="{email}";')
+    print(user)
+    return render_template('profile.html', data=user[0])
+
+# Returns the exact query result from the SQL database
+def database(query):       
+    db = mysql.connect(host=db_host, database=db_name, user=db_user, passwd=db_pass)
+    cursor = db.cursor()
+    try:
+        cursor.execute(query)
+        record = cursor.fetchall()
+        return record
+    except Exception as e:
+        print(e)
+    db.close()
+    return None
+
+# Runs query SPECIFICALLY for Posts table, and then finds each image related to each post returned in the 
+# query, and links them together, and returns one large list of all posts linked with lists of their images
+def database_posts(query):
+    posts = database(query)
+    print(posts)
+    data = []
+    for post in posts:
+        images = database(f'select url_link from Images where postID={post[0]};')
+        print(images)
+        post_with_image = list(post)
+        post_with_image.append([t[0] for t in images])
+        data.append(post_with_image)
+    print(data)
+    return data
+
+# Endpoint to query Post table, accepts either specific post id, post tag, or user id, email, first and/or last name
+# Example get request: serviceup.com/get_posts?tag=paint&email=test@gmail.com
+# This returns a list of all posts (with images) made by user with email test@gmail with tag of paint
+@app.route('/get_posts')
+def get_posts():
+    if not request.args:
+        return 'empty query', 400
+    viable_posts_query = ['id', 'tag' ]
+    viable_users_query = ['userID', 'email', 'firstName', 'lastName']
+    query = {'posts': {}, 'users':{} }
+    for key in request.args:
+        print(key, request.args[key])
+        if key in viable_posts_query:
+            query['posts'][key] = request.args[key]
+        elif key in viable_users_query:
+            query['users'][key] = request.args[key]
+        else:
+            return f'INVALID QUERY, usage: {viable_posts_query} {viable_users_query}'
+    
+    posts_query = ' and'.join([f'{key}="{val}"' for key, val in query['posts'].items()])
+    users_query = ' and'.join([f'{key}="{val}"' for key, val in query['users'].items()])
+    print(posts_query, users_query)
+
+    if query['posts'] and query['users']:
+        users = database(f"select * from Users where {users_query};")
+        print(users)
+        if users: 
+            posts_query += ' and userID = {users[0][0]}'
+        return jsonify(database_posts(posts_query))
+    elif query['posts']:
+        return jsonify(database_posts(posts_query))
+    elif query['users']:
+        users = database(f"select * from Users where {users_query};")
+        print(users)
+        if not users:
+            return jsonify([])
+        posts_query = f"select * from Posts where userID = {users[0][0]};"
+        return jsonify(database_posts(posts_query))
 
 @app.route('/post')
 def post():
