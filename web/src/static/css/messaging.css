@@ -1,0 +1,135 @@
+.messageBox {
+  width: 50%;
+  height: 60%;
+  margin-left: auto;
+  margin-right: auto;
+  position: absolute;
+  top: 30%;
+  left: 25%;
+  border: 5px solid #42bafa;
+}
+
+.messageList {
+  width: 30%;
+  height: 100%;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  background: #e0ecff;
+  display: inline-block;
+  box-sizing: border-box;
+}
+
+.messageListItem {
+  border-bottom: 3px solid #fedb6b;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.messageListItem h1 {
+  margin: 0;
+  font-size: 1.5vw;
+  padding: 0.4vw;
+}
+
+.messageListItem:hover {
+  color: blue;
+  cursor: pointer;
+}
+
+.messageListItem.active {
+  color: blue;
+}
+
+.messageArea {
+  width: 70%;
+  float: right;
+  background: white;
+  display: inline-block;
+  height: 100%;
+}
+
+.messages {
+  height: 90%;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  font-size: 0.8vw;
+}
+
+.newMessage {
+  height: 10%;
+  width: 100%;
+  background: green;
+  display: flex;
+}
+
+.emptyMessages {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+.emptyMessages p {
+  margin: 0;
+}
+
+.newMessage textarea {
+  width: 85%;
+  height: 100%; 
+  display: inline-block;
+  box-sizing: border-box;
+  resize: none;
+  font-size: 1vw;
+  padding: 0;
+  margin: 0;
+}
+
+.newMessage button {
+  height: 100%;
+  width: 15%;
+  display: inline-block;
+  text-align: center;
+  font-size: 1vw;
+  padding: 0;
+  margin: 0;
+}
+
+.recipientMessage, .senderMessage {
+  width: 100%;
+  clear: both;
+  display: block;
+  box-sizing: border-box;
+}
+
+.recipientMessage {
+  float: left;
+  margin-left: 2%;
+  text-align: left;
+}
+
+.senderMessage {
+  float: right;
+  margin-right: 2%;
+  text-align: right;
+}
+
+.messages .recipientMessage .message {
+  max-width: 40%;
+  float: left;
+  background: #fedb6b
+}
+
+.messages .senderMessage .message {
+  max-width: 40%;
+  float: right;
+  text-align: left;
+  background: #3cace8;
+}
+
+.message {
+  margin-left: 2%;
+  margin-right: 2%;
+  padding: 1px;
+  margin: 0;
+  border-radius: 10px;
+  padding: 5px;
+}

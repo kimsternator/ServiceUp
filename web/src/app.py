@@ -295,7 +295,7 @@ def get_filter(offset, filter):
 @app.route('/profile')
 def profile():
     if 'idinfo' not in session:
-        return redirect('/')
+        return 'MUST BE LOGGED IN'
     email = session['idinfo']['email']
     print(email)
     user = database(f'select * from Users where email="{email}";')
@@ -309,6 +309,9 @@ def database(query):
     try:
         cursor.execute(query)
         record = cursor.fetchall()
+        db.commit()
+        db.close()
+
         return record
     except Exception as e:
         print(e)
@@ -379,7 +382,10 @@ def new_post():
 
 @app.route('/messaging')
 def messaging():
-    return render_template('chat.html')
+    if 'idinfo' not in session:
+        return 'MUST BE LOGGED IN'
+
+    return render_template('messaging.html')
 
 @app.route('/messageuser')
 def messageUser():
@@ -450,6 +456,97 @@ def load_more():
 @app.route('/favicon.ico') 
 def favicon(): 
     return send_from_directory(os.path.join(app.root_path, 'static/images'), 'favicon.png', mimetype='image/vnd.microsoft.icon')
+
+
+@app.route('/get_chats', methods=['GET'])
+def get_chats():
+    userEmail = session['idinfo']['email']
+    userID = database(f'select id from Users where email="{userEmail}";')[0][0]
+    senderChats = database(f'select receiverID from Chats where senderID="{userID}";')
+    receiverChats = database(f'select senderID from Chats where receiverID="{userID}";')
+    userIDs = [chat[0] for chat in senderChats] + [chat[0] for chat in receiverChats]
+    chats = []
+
+    for id in userIDs:
+        theUser = database(f'select firstName, lastName from Users where id="{id}";')[0]
+
+        if theUser is not None:
+            chats.append((" ".join(theUser), id))
+
+    return {"chats": chats}
+
+
+@app.route('/get_messages/<recipientID>/<offset>', methods=['GET'])
+def get_messages(recipientID, offset):
+    userEmail = session['idinfo']['email']
+    userID = database(f'select id from Users where email="{userEmail}";')[0][0]
+
+    senderChatID = database(f'select id from Chats where senderID="{userID}" and receiverID="{recipientID}";')
+    receiverChatID = database(f'select id from Chats where receiverID="{userID}" and senderID="{recipientID}";')
+    chatID = 0
+
+    if senderChatID:
+        chatID = senderChatID[0][0]
+        sender = True
+    elif receiverChatID:
+        chatID = receiverChatID[0][0]
+        sender = False
+
+    if chatID == 0:
+        return {"messages": []}
+
+    messages = database(f'select message, senderID, receiverID from Messages where chatID={chatID} order by created_at asc limit {offset}, 18446744073709551615;')
+    messages = [(message[0], 0) if message[1] == userID else (message[0], 1) for message in messages]
+
+    return {"messages": messages}
+
+
+@app.route('/add_chat/<receiverId>', methods=['POST', 'GET'])
+def add_chat(receiverId):
+    if 'idinfo' not in session:
+        return {"message": 'MUST BE LOGGED IN'}
+
+    userEmail = session['idinfo']['email']
+    userID = database(f'select id from Users where email="{userEmail}";')[0][0]
+
+    if userID == int(receiverId):
+        return {"message": 'You cannot message yourself'}
+
+    chats = database(f'SELECT EXISTS(SELECT * FROM Chats WHERE receiverID="{userID}" OR senderID="{userID}" LIMIT 1);')[0][0]
+
+    #chat already exists between users
+    if chats == 0:
+        database(f'insert into Chats (receiverID, senderID) values ("{receiverId}", "{userID}");')
+
+    return {"message": 'success'}
+
+
+@app.route('/add_message', methods=['POST'])
+def add_message():
+    if 'idinfo' not in session:
+        return {"message": 'MUST BE LOGGED IN'}
+
+    userEmail = session['idinfo']['email']
+    userID = database(f'select id from Users where email="{userEmail}";')[0][0]
+    data = request.get_json()
+
+    senderChatID = database(f'select id from Chats where senderID="{userID}" and receiverID="{data["recipient"]}";')
+    receiverChatID = database(f'select id from Chats where receiverID="{userID}" and senderID="{data["recipient"]}";')
+    chatID = 0
+
+    if senderChatID:
+        chatID = senderChatID[0][0]
+        sender = True
+    elif receiverChatID:
+        chatID = receiverChatID[0][0]
+        sender = False
+
+    if chatID == 0:
+        return {"messages": []}
+
+    database(f'insert into Messages (chatID, message, receiverID, senderID) values ({chatID}, "{data["message"]}", {data["recipient"]}, {userID});')
+
+    return {}
 
 
 ####################

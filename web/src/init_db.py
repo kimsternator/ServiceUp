@@ -20,10 +20,13 @@ cursor = db.cursor()
 cursor.execute("drop table if exists Posts;")
 cursor.execute("drop table if exists Users;")
 cursor.execute("drop table if exists Images;")
+cursor.execute("drop table if exists Chats;")
+cursor.execute("drop table if exists Messages;")
 # cursor.execute("drop table if exists Messages;")
 
 # Create a TStudents table (wrapping it in a try-except is good practice)
 try:
+  print("Creating Posts Table")
   cursor.execute("""
     CREATE TABLE Posts (
     id              int AUTO_INCREMENT PRIMARY KEY,
@@ -40,7 +43,8 @@ except Exception as e:
   print(e)
   print("Posts table already exists. Not recreating it.")
 
-try: 
+try:
+  print("Creating Users Table")
   cursor.execute("""
     CREATE TABLE Users ( 
       id                int AUTO_INCREMENT PRIMARY KEY,
@@ -55,7 +59,8 @@ except Exception as e:
   print("Users table already exists. Not recreating it.")
 
 
-try: 
+try:
+  print("Creating Images Table")
   cursor.execute("""
     CREATE TABLE Images ( 
       id                int AUTO_INCREMENT PRIMARY KEY,
@@ -67,21 +72,33 @@ except Exception as e:
   print(e)
   print("Images table already exists. Not recreating it.")
 
-# try: 
-#   cursor.execute("""
-#     CREATE TABLE IF NOT EXISTS Messages (
-#      index int AUTO_INCREMENT PRIMARY KEY,
-#      date TEXT NOT NULL,
-#      message TEXT NOT NULL,
-#      receiverUserID int NOT NULL,
-#      senderUserID int NOT NULL
-#     );   
-#   """)
+try:
+  print("Creating Chats Table")
+  cursor.execute("""
+    CREATE TABLE IF NOT EXISTS Chats (
+     id                 int AUTO_INCREMENT PRIMARY KEY,
+     receiverID         int NOT NULL,
+     senderID           int NOT NULL
+    );   
+  """)
+except Exception as e:
+  print(e)
+  print("Chats table already exists. Not recreating it.")
 
-# except Exception as e:
-#   print(e)
-#   print("Messages table already exists. Not recreating it.")
-
-
+try:
+  print("Creating Messages Table")
+  cursor.execute("""
+    CREATE TABLE IF NOT EXISTS Messages (
+     id                 int AUTO_INCREMENT PRIMARY KEY,
+     chatID             int NOT NULL,
+     message            VARCHAR (100) NOT NULL,
+     receiverID         int NOT NULL,
+     senderID           int NOT NULL,
+     created_at         TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );   
+  """)
+except Exception as e:
+  print(e)
+  print("Messages table already exists. Not recreating it.")
 
 db.close()

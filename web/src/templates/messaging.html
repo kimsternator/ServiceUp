@@ -1,14 +1,25 @@
 {% extends "base.html" %}
-
+  
 {% block head %}
   {{ super() }}
-  <link rel="stylesheet" type="text/css" href="static/css/home.css">
-  <script src="static/js/home.js"></script>
+  <link rel="stylesheet" type="text/css" href="static/css/messaging.css">
+  <script src="static/js/messaging.js"></script>
 {% endblock %}
 
 {% block content %}
-   <h1>Messaging Center</h1> 
-    <div>--Your messages--</div>
-
-	
+   <div class="messageBox">
+      <div class="messageList" id="messageList">
+      </div>
+      <div class="messageArea">
+        <div class="messages" id="allMessages">
+          <div class="emptyMessages" id="emptyMsg">
+            <p class="emptyMessageDisplay">Please Select a Chat</p>
+          </div>
+        </div>
+        <div class="newMessage">
+          <textarea id="theNewMessage" maxlength="100" placeholder="Message..."></textarea>
+          <button id="send" type="button">Send</button>
+        </div>
+      </div>
+    </div>
 {% endblock %}
