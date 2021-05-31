@@ -1,6 +1,6 @@
 var getUrl = window.location;
 var baseUrl = getUrl .protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
-const base_link = baseUrl + '/'
+const base_link = baseUrl
 // const base_link = 'http://localhost:6004/'
 
 document.addEventListener("DOMContentLoaded", (event) => {
