@@ -3,8 +3,7 @@ var baseUrl = getUrl .protocol + "//" + getUrl.host + "/" + getUrl.pathname.spli
 
 document.addEventListener("DOMContentLoaded", (event) => {
   var offset = 0;
-  var dataURL = baseUrl + "/get_filter/";
-  // var dataURL = "http://localhost:6004/get_filter/";
+  var dataURL = base_link + "/get_filter/";
   
   loadMore();
   var load_more = document.getElementById("load");
