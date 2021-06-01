@@ -21,11 +21,13 @@ body {
 
 /* Modal Content */
 .modal-content {
+  border-radius: 5px;
   background-color: #fefefe;
   margin: auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 80%;
+  width: 25%;
+  text-align: center;
 }
 
 /* The Close Button */
@@ -78,6 +80,18 @@ body {
   margin-left: 20px;
 }
 
+.inside-modal {
+  margin: auto;
+  text-align: center;
+}
+
+.g-signin2{
+  width: 100%;
+}
+
+.g-signin2 > div{
+  margin: 0 auto;
+}
 
 .nav {
   position: fixed;
