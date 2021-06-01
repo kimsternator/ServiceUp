@@ -95,7 +95,8 @@ body {
 
 #descCountID {
   margin-top: 9rem;
-  width: 10%;
+  width: 15%;
+  text-align: right;
 }
 
 .submit {
