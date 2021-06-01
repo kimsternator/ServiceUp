@@ -283,7 +283,7 @@ def get_filter(offset, filter):
             filtered_records.append({"id": post[0], "title": post[1],
                                      "image_url": url,
                                      "elapsed": get_hours(post[2]),
-                                     "city": post[3]})
+                                     "city": post[5]})
 
     db.close()
 
