@@ -75,7 +75,7 @@ def get_hours(then):
     if then is None:
         return "?"
     now = datetime.datetime.now()
-    hours = (now - then).total_seconds() // 360
+    hours = (now - then).total_seconds() // 3600
 
     if hours < 1:
         hours = "<1"
