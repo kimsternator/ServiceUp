@@ -549,6 +549,24 @@ def add_message():
     return {}
 
 
+@app.route('/remove_post/<postID>', methods=['POST', 'GET'])
+def remove_post(postID):
+    if 'idinfo' not in session:
+        return {"message": 'MUST BE LOGGED IN'}
+
+    userEmail = session['idinfo']['email']
+    userID = database(f'select id from Users where email="{userEmail}";')[0][0]
+
+    postUserID = database(f'select userID from Posts where id={postID};')[0][0]
+
+    if userID == postUserID:
+        database(f'delete from Posts where id={postID};')
+
+        return {"message": "success"}
+
+    return {"message": "This is not your post. You cannot mark it as complete"}
+
+
 ####################
 
 from flask import jsonify

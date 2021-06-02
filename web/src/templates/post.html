@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block content %}
-        <div class="post">
+        <div class="post" id="postHead" data-src="{{ data['post_data']['id'] }}">
           <div class="title">{{ data['post_data']['title'] }}</div>
           <div class="row">
             <div class="column">
@@ -35,8 +35,9 @@
         <div id="posterID" style="visibility: hidden;">{{ data['post_data']['userID'] }}</div>
 
         <div class="bottomNav">
-          <img id="profileUser" src="https://mpng.subpng.com/20180404/sqe/kisspng-computer-icons-user-profile-clip-art-big-5ac5283827d286.2570974715228703281631.jpg"/>
-          <img id="messageUser" src=https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFn7AQecL992owq8IzGEFmFlbLroPxiWfxVQ&usqp=CAU/>
+          <img id="profileUser" src="https://mpng.subpng.com/20180404/sqe/kisspng-computer-icons-user-profile-clip-art-big-5ac5283827d286.2570974715228703281631.jpg" />
+          <img id="messageUser" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFn7AQecL992owq8IzGEFmFlbLroPxiWfxVQ&usqp=CAU" />
+          <img id="markAsComplete" src="https://uxwing.com/wp-content/themes/uxwing/download/01-user_interface/success-green-check-mark.png" class="completeImg" />
         </div>
     </body>
 {% endblock %}
