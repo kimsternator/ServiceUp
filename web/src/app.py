@@ -45,6 +45,7 @@ def comp(x, city):
 
 @app.route('/get_main_posts/<offset>', methods=['GET'])
 def get_main_posts(offset):
+    print(offset)
     try:
         ip = request.remote_addr
         print(ip)
@@ -56,13 +57,17 @@ def get_main_posts(offset):
         print("ip = " + str(ip))
 
     print(city)
-    records = database(f'select id, title, created_at, city from Posts order by created_at desc limit {offset}, 12;')
+    records = database(f'select id, title, created_at, city from Posts')
     print(records)
-    records.sort(reverse=True, key=lambda x: (comp(x[3].lower(), city.lower()), x[2]))
+    if records:
+        records.sort(reverse=True, key=lambda x: (comp(x[3].lower(), city.lower()), x[2]))
     print(records)
     thePosts = []
 
-    for post in records:
+    first = int(offset)
+    last = min(len(records), first + 12)
+    for i in range(first, last):
+        post = records[i]
         url = database(f"select url_link from Images where postID={post[0]} limit 1;")
 
         if url == []:
