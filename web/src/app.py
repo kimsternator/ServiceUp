@@ -46,7 +46,13 @@ def get_main_posts(offset):
     thePosts = []
 
     for post in records:
-        url = database(f"select url_link from Images where postID={post[0]} limit 1;")[0]
+        url = database(f"select url_link from Images where postID={post[0]} limit 1;")
+
+        if url == []:
+            url = ""
+        else:
+            url = url[0]
+
         thePosts.append({"id": post[0],
                          "title": post[1],
                          "image_url": url,

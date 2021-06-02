@@ -1,9 +1,9 @@
 var getUrl = window.location;
-var baseUrl = getUrl .protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
+var baseUrl = getUrl .protocol + "/" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
 
 document.addEventListener("DOMContentLoaded", (event) => {
   var offset = 0;
-  var dataURL = base_link + "/get_filter/";
+  var dataURL = base_link + "get_filter/";
   
   loadMore();
   var load_more = document.getElementById("load");
