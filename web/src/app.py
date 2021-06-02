@@ -41,7 +41,9 @@ def get_main_posts(offset):
         city = DbIpCity.get(ip, api_key='free').city
     except KeyError:
         city = "San Diego"
+        print("ip error")
 
+    print(city)
     records = database(f'select id, title, created_at, city from Posts where city="{city}" limit {offset}, 12;')
     thePosts = []
 
