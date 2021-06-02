@@ -508,7 +508,7 @@ def add_chat(receiverId):
     if userID == int(receiverId):
         return {"message": 'You cannot message yourself'}
 
-    chats = database(f'SELECT EXISTS(SELECT * FROM Chats WHERE receiverID="{userID}" OR senderID="{userID}" LIMIT 1);')[0][0]
+    chats = database(f'SELECT EXISTS(SELECT * FROM Chats WHERE receiverID="{userID}" and senderID="{receiverId}" OR senderID="{userID}" and receiverID="{receiverId}" LIMIT 1);')[0][0]
 
     #chat doesnt already exists between users
     if chats == 0:
