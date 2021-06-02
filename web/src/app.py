@@ -12,7 +12,7 @@ import datetime
 import time
 import json
 
-from ip2geotools.databases.noncommercial import DbIpCity
+import ipinfo
 
 GOOGLE_CLIENT_ID = '675774771358-d9cs6b29kg2ce9tao1l6kq0o55s76fku.apps.googleusercontent.com'
 
@@ -20,9 +20,12 @@ db_user = os.environ['MYSQL_USER']
 db_pass = os.environ['MYSQL_PASSWORD']
 db_name = os.environ['MYSQL_DATABASE']
 db_host = os.environ['MYSQL_HOST']
+access_token = os.environ['ip_token']
+handler = ipinfo.getHandler(access_token)
 
 app = Flask(__name__)
 app.secret_key = 'thissecretisrequired'
+
 
 @app.route('/database_test')
 def database_test():
@@ -34,15 +37,18 @@ def database_test():
   db.close()
   return records
 
+
 @app.route('/get_main_posts/<offset>', methods=['GET'])
 def get_main_posts(offset):
     try:
         ip = request.remote_addr
-        city = DbIpCity.get(ip, api_key='free').city
+        print(ip)
+        city = handler.getDetails(ip).city
         print(city)
-    except KeyError:
+    except:
         city = "San Diego"
         print("ip error")
+        print("ip = " + str(ip))
 
     print(city)
     records = database(f'select id, title, created_at, city from Posts where city="{city}" limit {offset}, 12;')
@@ -215,8 +221,8 @@ def submit_post():
         try:
             ip = request.remote_addr
             print(ip)
-            city = DbIpCity.get(ip, api_key='free').city
-        except KeyError:
+            city = handler.getDetails(ip).city
+        except:
             city = "San Diego"
 
         theDict["city"] = city
@@ -248,8 +254,8 @@ def get_filter(offset, filter):
     try:
         ip = request.remote_addr
         print(ip)
-        city = DbIpCity.get(ip, api_key='free').city
-    except KeyError:
+        city = handler.getDetails(ip).city
+    except:
         city = "San Diego"
 
     print(city)
@@ -425,8 +431,8 @@ def load_more():
     try:
         ip = request.remote_addr
         print(ip)
-        city = DbIpCity.get(ip, api_key='free').city
-    except KeyError:
+        city = handler.getDetails(ip).city
+    except:
         city = "San Diego"
 
     print(city)

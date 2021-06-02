@@ -8,4 +8,4 @@ mysql-connector-python
 bjoern
 python-dotenv
 google-cloud-storage
-ip2geotools
+ipinfo
