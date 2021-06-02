@@ -50,9 +50,9 @@ def get_main_posts(offset):
         print(ip)
         city = handler.getDetails(ip).city
         print(city)
-    except:
-        city = "San Diego"
-        print("ip error")
+    except Exception as e:
+        city = ""
+        print("ip error" + str(e))
         print("ip = " + str(ip))
 
     print(city)
@@ -241,6 +241,7 @@ def submit_post():
     description = theDict["desc"]
     price = theDict["price"]
     tag = theDict["tag"]
+    city = theDict["city"]
     database(f'insert into Posts (userID, title, description, price, tag, city) VALUES ({userID}, "{title}", "{description}", {price}, "{tag}", "{city}");')
     postID = database(f'SELECT id FROM Posts ORDER BY ID DESC LIMIT 1;')[0][0]
 
