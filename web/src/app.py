@@ -516,6 +516,7 @@ def add_chat(receiverId):
         print(database("select * from Chats;"))
 
     print(receiverId, userID)
+    print(database("select * from Chats;"))
 
     return {"message": 'success'}
 
