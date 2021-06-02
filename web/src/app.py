@@ -510,9 +510,12 @@ def add_chat(receiverId):
 
     chats = database(f'SELECT EXISTS(SELECT * FROM Chats WHERE receiverID="{userID}" OR senderID="{userID}" LIMIT 1);')[0][0]
 
-    #chat already exists between users
+    #chat doesnt already exists between users
     if chats == 0:
         database(f'insert into Chats (receiverID, senderID) values ("{receiverId}", "{userID}");')
+        print(database("select * from Chats;"))
+
+    print(receiverId, userID)
 
     return {"message": 'success'}
 
