@@ -39,6 +39,7 @@ def get_main_posts(offset):
     try:
         ip = request.remote_addr
         city = DbIpCity.get(ip, api_key='free').city
+        print(city)
     except KeyError:
         city = "San Diego"
         print("ip error")
@@ -205,75 +206,35 @@ def submit_post():
         image_links.append(link)
 
     # get the user ID
-    db = mysql.connect(user=db_user, password=db_pass, host=db_host, database=db_name)
-    cursor = db.cursor()
-    print('-----getting userID-----')
-    finding_user = session['idinfo']['email']
-    print(finding_user)
-    #query = (f"select id from Users where email={session['idinfo']['email']}")
-    query = ("SELECT id from Users where email=%s")
-    values = (finding_user,)
-    cursor.execute(query, values)
-    #cursor.execute('SELECT id from Users where email=:contact', {'contact': finding_user})
-    userID = cursor.fetchall()[0]
-    db.commit()
-    print('----got user id----')
+    email = session['idinfo']['email']
+    userID = database(f'select id from Users where email="{email}";')[0][0]
+
+    theDict = request.form.to_dict()
 
     if request.form.get('city', type=str) == "":
-        ip = request.remote_addr
-        print(ip)
-        city = DbIpCity.get(ip, api_key='free').city
-        print(city)
-
         try:
-            request.form.add("city", DbIpCity.get(ip, api_key='free').city)
+            ip = request.remote_addr
+            print(ip)
+            city = DbIpCity.get(ip, api_key='free').city
         except KeyError:
-            request.form.add("city", "San Diego")
+            city = "San Diego"
 
-    print(request.form.to_dict(flat=False))
-    # request.form[''] contains all the different data the user put in
-    print(request.form)
+        theDict["city"] = city
 
     # put everything in the databases
-    cursor = db.cursor()
-    user = userID # seems like userID is getting returned as a tuple
-    user_value = user[0]
+    print(theDict)
+    title = theDict["title"]
+    description = theDict["desc"]
+    price = theDict["price"]
+    tag = theDict["tag"]
+    database(f'insert into Posts (userID, title, description, price, tag, city) VALUES ({userID}, "{title}", "{description}", {price}, "{tag}", "{city}");')
+    postID = database(f'SELECT id FROM Posts ORDER BY ID DESC LIMIT 1;')[0][0]
 
-    title = request.form.get("title", type=str)
-    description = request.form.get("desc", type=str)
-    price = request.form.get("price", type=str)
-    tag = request.form.get("tag", type=str)
-    City = request.form.get("city", type=str)
-    
-    #query = (f"insert into Posts (userID, title, description, price, tag, city) values ({userID}, {request.form.get("title", type=str)}, {request.form.get("description", type=str)}, {request.form.get("price", type=str)}, {request.form.get("tag", type=str)}, {request.form.get("city", type=str)});")
-    cursor.execute('INSERT INTO Posts (userID, title, description, price, tag, city) VALUES (%s,%s,%s,%s,%s,%s)', (user_value, title, description, price, tag, City))
-    db.commit()
-
-    # Selecting Posts to make sure data base works
-    cursor.execute("select * from Posts;")
-    print('---------- DATABASE POSTS INITIALIZED ----------')
-    [print(x) for x in cursor]
-
-    query = (f"SELECT * FROM Posts ORDER BY ID DESC LIMIT 1;")
-    cursor.execute(query)
-    postID = cursor.fetchall()[0] # not sure if you guys meant to fetchone, you previously had fetchall[0] which was giving an error.
-    #image_links = [f"({postID}, {linkurl})" for linkurl in image_links]
-    db.commit()
-
-    the_id = postID[0]
-    # the_url = image_links[0]
-    # #query = (f"insert into Images (postID, url) values {", ".join(image_links)}")
     for the_url in image_links:
-        cursor.execute('INSERT into Images (postID, url_link) VALUES (%s,%s)' , (the_id, the_url))
-        db.commit()
+        database(f'insert into Images (postID, url_link) values ({postID}, "{the_url}");')
 
-    # Selecting Images to make sure data base works
-    cursor.execute("select * from Images;")
-    print('---------- DATABASE Images INITIALIZED ----------')
-    [print(x) for x in cursor]
-    db.close()
-    
-    return redirect('/listing?id=' + str(the_id))
+    return redirect('/listing?id=' + str(postID))
+
 
 @app.route("/get_filter/<offset>/<filter>")
 def get_filter(offset, filter):
@@ -320,16 +281,20 @@ def get_filter(offset, filter):
 def profile():
     if 'idinfo' not in session:
         return 'MUST BE LOGGED IN'
+
     email = session['idinfo']['email']
     print(email)
     user = database(f'select * from Users where email="{email}";')
     print(user)
+
     return render_template('profile.html', data=user[0])
+
 
 # Returns the exact query result from the SQL database
 def database(query):       
     db = mysql.connect(host=db_host, database=db_name, user=db_user, passwd=db_pass)
     cursor = db.cursor()
+
     try:
         cursor.execute(query)
         record = cursor.fetchall()
@@ -340,6 +305,7 @@ def database(query):
     except Exception as e:
         print(e)
     db.close()
+
     return None
 
 # Runs query SPECIFICALLY for Posts table, and then finds each image related to each post returned in the 
