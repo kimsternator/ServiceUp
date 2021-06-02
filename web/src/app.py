@@ -37,6 +37,11 @@ def database_test():
   db.close()
   return records
 
+def comp(x, city):
+    if x == city:
+        return 1
+    else:
+        return -1
 
 @app.route('/get_main_posts/<offset>', methods=['GET'])
 def get_main_posts(offset):
@@ -51,7 +56,10 @@ def get_main_posts(offset):
         print("ip = " + str(ip))
 
     print(city)
-    records = database(f'select id, title, created_at, city from Posts where city="{city}" limit {offset}, 12;')
+    records = database(f'select id, title, created_at, city from Posts limit {offset}, 12;')
+    print(records)
+    records.sort(reverse=True, key=lambda x: (comp(x[3], city.lower()), x[2]))
+    print(records)
     thePosts = []
 
     for post in records:
