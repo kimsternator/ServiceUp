@@ -36,18 +36,17 @@ def database_test():
 
 @app.route('/get_main_posts/<offset>', methods=['GET'])
 def get_main_posts(offset):
-    db = mysql.connect(host=db_host, database=db_name, user=db_user, passwd=db_pass)
-    cursor = db.cursor()
-    # get the posts
-    cursor.execute(f"select id, title, created_at, city from Posts limit {offset}, 12;")
-    records = cursor.fetchall()
-    db.commit()
+    try:
+        ip = request.remote_addr
+        city = DbIpCity.get(ip, api_key='free').city
+    except KeyError:
+        city = "San Diego"
+
+    records = database(f'select id, title, created_at, city from Posts where city="{city}" limit {offset}, 12;')
     thePosts = []
 
-    print(records)
     for post in records:
-        cursor.execute(f"select url_link from Images where postID={post[0]} limit 1;")
-        url = cursor.fetchall()[0]
+        url = database(f"select url_link from Images where postID={post[0]} limit 1;")[0]
         thePosts.append({"id": post[0],
                          "title": post[1],
                          "image_url": url,
@@ -200,12 +199,16 @@ def submit_post():
     db.commit()
     print('----got user id----')
 
-    if request.form.get('city', type=str) is None:
+    if request.form.get('city', type=str) == "":
         ip = request.remote_addr
         print(ip)
         city = DbIpCity.get(ip, api_key='free').city
         print(city)
-        # request.form.add("city", DbIpCity.get(ip, api_key='free').city)
+
+        try:
+            request.form.add("city", DbIpCity.get(ip, api_key='free').city)
+        except KeyError:
+            request.form.add("city", "San Diego")
 
     print(request.form.to_dict(flat=False))
     # request.form[''] contains all the different data the user put in
