@@ -60,7 +60,7 @@ def get_main_posts(offset):
     records = database(f'select id, title, created_at, city from Posts')
     print(records)
     if records:
-        records.sort(reverse=True, key=lambda x: (comp(x[3].lower(), city.lower()), x[2]))
+        records.sort(reverse=True, key=lambda x: (comp(x[3].lower(), city.lower()), x[2]) if city else x[2])
     print(records)
     thePosts = []
 
