@@ -56,7 +56,7 @@ def get_main_posts(offset):
         print("ip = " + str(ip))
 
     print(city)
-    records = database(f'select id, title, created_at, city from Posts limit {offset}, 12;')
+    records = database(f'select id, title, created_at, city from Posts order by created_at desc limit {offset}, 12;')
     print(records)
     records.sort(reverse=True, key=lambda x: (comp(x[3].lower(), city.lower()), x[2]))
     print(records)
