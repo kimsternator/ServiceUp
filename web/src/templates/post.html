@@ -7,37 +7,67 @@
 {% endblock %}
 
 {% block content %}
-        <div class="post" id="postHead" data-src="{{ data['post_data']['id'] }}">
-          <div class="title">{{ data['post_data']['title'] }}</div>
-          <div class="row">
-            <div class="column">
-              <img class="image" src="{{ data['image_data']['url_link'] }}"/>
-            </div>
-            <div class="column">
-              <div id="service">Service
-                <div id="serviceBody" class="postBody">{{ data['post_data']['title'] }}</div>
-              </div>
-              <div id="who">Who
-                <div id="serviceBody" class="postBody">{{ data['user_data']['first_name'] }}</div>
-              </div>
-              <div id="when">Tag
-                <div id="serviceBody" class="postBody">{{ data['post_data']['tag'] }}</div>
-              </div>
-              <div id="much">How Much
-                <div id="serviceBody" class="postBody">{{ data['post_data']['price'] }}</div>
-              </div>
-              <div id="description">Description
-                <div id="serviceBody" class="postBody">{{ data['post_data']['description'] }}</div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div id="posterID" style="visibility: hidden;">{{ data['post_data']['userID'] }}</div>
+  <div class="post" id="postHead" data-src="{{ data['post'][0] }}">
+    <div class="title">{{ data['post'][2] }}</div>
+    <div class="row">
 
-        <div class="bottomNav">
-          <img id="profileUser" src="https://mpng.subpng.com/20180404/sqe/kisspng-computer-icons-user-profile-clip-art-big-5ac5283827d286.2570974715228703281631.jpg" />
-          <img id="messageUser" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFn7AQecL992owq8IzGEFmFlbLroPxiWfxVQ&usqp=CAU" />
-          <img id="markAsComplete" src="https://uxwing.com/wp-content/themes/uxwing/download/01-user_interface/success-green-check-mark.png" class="completeImg" />
+      <style>
+        .mySlides {display:none;}
+        </style>
+        <body>
+                      
+        <div class="column">
+          {% for image in data['post'][8] %}
+            <img class="mySlides image" src="{{ image }}"/>
+          {% endfor %}
+          <button class="w3-button w3-black w3-display-left" onclick="plusDivs(-1)">&#10094;</button>
+          <button class="w3-button w3-black w3-display-right" onclick="plusDivs(1)">&#10095;</button>
         </div>
-    </body>
+        
+        <script>
+          var slideIndex = 1;
+          showDivs(slideIndex);
+          
+          function plusDivs(n) {
+            showDivs(slideIndex += n);
+          }
+          
+          function showDivs(n) {
+            var i;
+            var x = document.getElementsByClassName("mySlides");
+            if (n > x.length) {slideIndex = 1}
+            if (n < 1) {slideIndex = x.length}
+            for (i = 0; i < x.length; i++) {
+              x[i].style.display = "none";  
+            }
+            x[slideIndex-1].style.display = "block";  
+          }
+        </script>
+      <div class="column">
+        <div id="service">Service
+          <div id="serviceBody" class="postBody">{{ data['post'][2] }}</div>
+        </div>
+        <div id="who">Who
+          <div id="serviceBody" class="postBody">{{ data['user'][2] }}</div>
+        </div>
+        <div id="when">Tag
+          <div id="serviceBody" class="postBody">{{ data['post'][5] }}</div>
+        </div>
+        <div id="much">How Much
+          <div id="serviceBody" class="postBody">{{ data['post'][4] }}</div>
+        </div>
+        <div id="description">Description
+          <div id="serviceBody" class="postBody">{{ data['post'][3] }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+    <div id="posterID" style="visibility: hidden;">{{ data['post'][1] }}</div>
+
+    <div class="bottomNav">
+      <img id="profileUser" src="https://mpng.subpng.com/20180404/sqe/kisspng-computer-icons-user-profile-clip-art-big-5ac5283827d286.2570974715228703281631.jpg" />
+      <img id="messageUser" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFn7AQecL992owq8IzGEFmFlbLroPxiWfxVQ&usqp=CAU" />
+      <img id="markAsComplete" src="https://uxwing.com/wp-content/themes/uxwing/download/01-user_interface/success-green-check-mark.png" class="completeImg" />
+    </div>
+</body>
 {% endblock %}

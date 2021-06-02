@@ -101,26 +101,38 @@ def listing():
     print(id)
     if id == None:
         return redirect('/')
-    db = mysql.connect(host=db_host, database=db_name, user=db_user, passwd=db_pass)
-    cursor = db.cursor()
-    cursor.execute(f"select * from Posts where id = {id};")
-    temp1 = cursor.fetchall()
-    print(temp1)
-    user_id = temp1[0][1]
-    cursor.execute(f"select * from Users where id = {user_id};")
-    temp2 = cursor.fetchall()
-    print(temp2)
-    cursor.execute(f"select * from Images where postID = {temp1[0][0]};")
-    temp3 = cursor.fetchall()
-    db.close()
-    arr1 = convert_json(temp1, ['id', 'userID', 'title', 'description', 'price', 'tag', 'city', 'createdAt'])
-    arr2 = convert_json(temp2, ['id', 'email', 'first_name', 'last_name', 'picture'])
-    arr3 = convert_json(temp3, ['id', 'postID', 'url_link'])
+    posts_query = f"select * from Posts where id = {id};"
+    post = database_posts(posts_query)[0]
+    user_id = post[1]
+    user = database(f"select * from Users where id = {user_id};")[0]
+    print(post)
+    print(user)
+    # db = mysql.connect(host=db_host, database=db_name, user=db_user, passwd=db_pass)
+    # cursor = db.cursor()
+    # cursor.execute(f"select * from Posts where id = {id};")
+    # temp1 = cursor.fetchall()
+    # print(temp1)
+    # user_id = temp1[0][1]
+    # cursor.execute(f"select * from Users where id = {user_id};")
+    # temp2 = cursor.fetchall()
+    # print(temp2)
+    # cursor.execute(f"select * from Images where postID = {temp1[0][0]};")
+    # temp3 = cursor.fetchall()
+    # db.close()
+    # arr1 = convert_json(temp1, ['id', 'userID', 'title', 'description', 'price', 'tag', 'city', 'createdAt'])
+    # arr2 = convert_json(temp2, ['id', 'email', 'first_name', 'last_name', 'picture'])
+    # arr3 = convert_json(temp3, ['id', 'postID', 'url_link'])
 
-    print(arr1)
-    print(arr2)
-    # , {"picture":temp2[0][4], 'Service':}
-    return render_template('post.html', data={'post_data':arr1, 'user_data':arr2, 'image_data':arr3})
+    # users = database(f"select * from Users where {users_query};")
+    # print(users)
+    # if not users:
+    #     return jsonify([])
+    # posts_query = f"select * from Posts where userID = {users[0][0]};"
+    # return jsonify(database_posts(posts_query))
+    # print(arr1)
+    # print(arr2)
+    # # , {"picture":temp2[0][4], 'Service':}
+    return render_template('post.html', data={'post':post, 'user':user})
 
 @app.route('/login',methods = ['POST'])
 def login():
@@ -247,10 +259,11 @@ def submit_post():
     db.commit()
 
     the_id = postID[0]
-    the_url = image_links[0]
+    # the_url = image_links[0]
     # #query = (f"insert into Images (postID, url) values {", ".join(image_links)}")
-    cursor.execute('INSERT into Images (postID, url_link) VALUES (%s,%s)' , (the_id, the_url))
-    db.commit()
+    for the_url in image_links:
+        cursor.execute('INSERT into Images (postID, url_link) VALUES (%s,%s)' , (the_id, the_url))
+        db.commit()
 
     # Selecting Images to make sure data base works
     cursor.execute("select * from Images;")
