@@ -82,7 +82,6 @@ def get_main_posts(offset):
     elif len(records) < 12:
         print("finishing off")
         the_rest = database(f'select id, title, created_at, city from Posts where city!="{city}" order by created_at desc limit {offset}, {12-len(records)};')
-        print(the_rest)
 
         for record in the_rest:
             records.append(record)
@@ -515,6 +514,7 @@ def add_message():
 
 @app.route('/remove_post/<postID>', methods=['POST', 'GET'])
 def remove_post(postID):
+    print(database(f'select * from Users;'))
     if 'idinfo' not in session:
         return {"message": 'MUST BE LOGGED IN'}
 
