@@ -85,7 +85,8 @@ def get_main_posts(offset):
         done = True
     elif len(records) < 12:
         print("finishing off")
-        the_rest = database(f'select id, title, created_at, city from Posts where city!="{city}" order by created_at desc limit {offset}, {12-len(records)};')
+        the_rest = database(f'select id, title, created_at, city from Posts where city!="{city}" order by created_at desc limit 50;')
+        done = True
 
         for record in the_rest:
             records.append(record)
