@@ -26,6 +26,10 @@ handler = ipinfo.getHandler(access_token)
 app = Flask(__name__)
 app.secret_key = 'thissecretisrequired'
 
+adminUsers = (1, 2, 3, 5)
+# 1 - vlad
+# 2, 3 - stephen
+# 5 - manuel
 
 @app.route('/database_test')
 def database_test():
@@ -523,7 +527,7 @@ def remove_post(postID):
 
     postUserID = database(f'select userID from Posts where id={postID};')[0][0]
 
-    if userID == postUserID:
+    if userID == postUserID or userID in adminUsers:
         database(f'delete from Posts where id={postID};')
 
         return {"message": "success"}
