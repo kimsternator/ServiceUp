@@ -70,9 +70,22 @@ def get_city():
 @app.route('/get_main_posts/<offset>', methods=['GET'])
 def get_main_posts(offset):
     city = get_city()
+    done = False
     print(city)
     records = database(f'select id, title, created_at, city from Posts where city="{city}" order by created_at desc limit {offset}, 12;')
     thePosts = []
+
+    if not records:
+        print("getting more")
+        records = database(f'select id, title, created_at, city from Posts where city!="{city}" order by created_at desc limit 50;')
+        done = True
+    elif len(records) < 12:
+        print("finishing off")
+        the_rest = database(f'select id, title, created_at, city from Posts where city!="{city}" order by created_at desc limit {offset}, {12-len(records)};')
+        print(the_rest)
+
+        for record in the_rest:
+            records.append(record)
 
     for post in records:
         url = database(f"select url_link from Images where postID={post[0]} limit 1;")
@@ -88,7 +101,7 @@ def get_main_posts(offset):
                          "elapsed": get_hours(post[2]),
                          "city": post[3]})
 
-    return {"posts": thePosts}
+    return {"posts": thePosts, "ended": 1 if done else 0}
 
 
 def get_hours(then):

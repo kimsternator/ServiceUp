@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   var offset = 0;
   var dataURL = baseUrl + "/get_main_posts/";
   var using = false;
+  var finished = false;
   // var dataURL = "http://localhost:6004/get_main_posts/";
   
   loadMore();
@@ -87,6 +88,10 @@ document.addEventListener("DOMContentLoaded", (event) => {
       document.getElementById("load").style.visibility = "hidden";
     }
 
+    if(data["ended"] == 1) {
+      finished = true;
+    }
+
     using = false;
   }
 
@@ -95,7 +100,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   } 
 
   function loadMore() {
-    if(!using){
+    if(!using && !finished){
       using = true;
 
       fetch(dataURL + String(offset))
