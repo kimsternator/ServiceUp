@@ -29,13 +29,15 @@ app.secret_key = 'thissecretisrequired'
 
 @app.route('/database_test')
 def database_test():
-  # Connect to the database and retrieve the users
-  db = mysql.connect(host=db_host, database=db_name, user=db_user, passwd=db_pass)
-  cursor = db.cursor()
-  cursor.execute("select first_name, last_name, email from Users;")
-  records = cursor.fetchall()
-  db.close()
-  return records
+    # Connect to the database and retrieve the users
+    db = mysql.connect(host=db_host, database=db_name, user=db_user, passwd=db_pass)
+    cursor = db.cursor()
+    cursor.execute("select first_name, last_name, email from Users;")
+    records = cursor.fetchall()
+    db.close()
+
+    return records
+
 
 def comp(x, city):
     if x == city:
@@ -43,35 +45,40 @@ def comp(x, city):
     else:
         return -1
 
-@app.route('/get_main_posts/<offset>', methods=['GET'])
-def get_main_posts(offset):
-    print(offset)
+
+def get_city():
     try:
         ip = request.remote_addr
-        print(ip)
-        city = handler.getDetails(ip).city
-        print(city)
+        details = handler.getDetails(ip).details
+
+        if "bogon" in details:
+            print("bogon")
+            city = "San Diego"
+        elif "city" in details:
+            city = details["city"]
+        else:
+            city = "San Diego"
+
     except Exception as e:
-        city = ""
-        print("ip error" + str(e))
+        city = "San Diego"
+        print("ip error " + str(e))
         print("ip = " + str(ip))
 
+    return city
+
+
+@app.route('/get_main_posts/<offset>', methods=['GET'])
+def get_main_posts(offset):
+    city = get_city()
     print(city)
-    records = database(f'select id, title, created_at, city from Posts')
-    print(records)
-    if records:
-        records.sort(reverse=True, key=lambda x: (comp(x[3].lower(), city.lower()), x[2]) if city else x[2])
-    print(records)
+    records = database(f'select id, title, created_at, city from Posts where city="{city}" order by created_at desc limit {offset}, 12;')
     thePosts = []
 
-    first = int(offset)
-    last = min(len(records), first + 12)
-    for i in range(first, last):
-        post = records[i]
+    for post in records:
         url = database(f"select url_link from Images where postID={post[0]} limit 1;")
 
-        if url == []:
-            url = ""
+        if not url:
+            url = "http://serviceup.tech/static/images/serviceUp.png"
         else:
             url = url[0]
 
@@ -97,15 +104,18 @@ def get_hours(then):
 
     return hours
 
+
 @app.route('/')
 def home():
     return render_template('home.html')
+
 
 def convert_json(record, rest):
     d = {}
     for i, field in enumerate(rest):
         d[field] = record[0][i]
     return d
+
 
 @app.route('/search')
 def search():
@@ -117,18 +127,19 @@ def search():
 
     return render_template('search.html', **filter)
 
+
 @app.route('/listing')
 def listing():
     id = request.args.get('id')
     print(id)
-    if id == None:
+
+    if id == "":
         return redirect('/')
+
     posts_query = f"select * from Posts where id = {id};"
     post = database_posts(posts_query)[0]
     user_id = post[1]
     user = database(f"select * from Users where id = {user_id};")[0]
-    print(post)
-    print(user)
     # db = mysql.connect(host=db_host, database=db_name, user=db_user, passwd=db_pass)
     # cursor = db.cursor()
     # cursor.execute(f"select * from Posts where id = {id};")
@@ -198,11 +209,14 @@ def login():
         print('Invalid token')
         return 'invalid token'
 
+
 @app.route('/logout')
 def logout():
     email = session['idinfo']['email']
     session.clear()
+
     return email
+
 
 @app.route('/submit_post', methods=['POST'])
 def submit_post():
@@ -231,13 +245,7 @@ def submit_post():
     theDict = request.form.to_dict()
 
     if request.form.get('city', type=str) == "":
-        try:
-            ip = request.remote_addr
-            print(ip)
-            city = handler.getDetails(ip).city
-        except:
-            city = "San Diego"
-
+        city = get_city()
         theDict["city"] = city
 
     # put everything in the databases
@@ -258,43 +266,26 @@ def submit_post():
 
 @app.route("/get_filter/<offset>/<filter>")
 def get_filter(offset, filter):
-    # filter = request.args.get('filter')
-    print(offset)
-    print(filter)
-
-    if filter == None:
+    if filter == "":
         return redirect('/')
 
-    try:
-        ip = request.remote_addr
-        print(ip)
-        city = handler.getDetails(ip).city
-    except:
-        city = "San Diego"
-
+    city = get_city()
     print(city)
-    db = mysql.connect(host=db_host, database=db_name, user=db_user, passwd=db_pass)
-    cursor = db.cursor()
-    cursor.execute(f"select id, title, created_at, description, tag, city from Posts;")
-    records = cursor.fetchall()
-    db.commit()
-    print(records)
+    records = database(f"select id, title, created_at, description, tag, city from Posts order by created_at desc limit {offset}, 12;")
     filtered_records = []
 
     for post in records:
         if any(filter.lower() in str(string).lower() for string in post):
-            cursor.execute(f"select url_link from Images where postID={post[0]} limit 1;")
-            url = cursor.fetchall()[0]
+            url = database(f"select url_link from Images where postID={post[0]} limit 1;")[0]
             filtered_records.append({"id": post[0], "title": post[1],
                                      "image_url": url,
                                      "elapsed": get_hours(post[2]),
                                      "city": post[5]})
 
-    db.close()
-
     records = {"posts": filtered_records}
 
     return records
+
 
 # Renders the custom user profile if logged in, redirects to home otherwise
 @app.route('/profile')
@@ -328,6 +319,7 @@ def database(query):
 
     return None
 
+
 # Runs query SPECIFICALLY for Posts table, and then finds each image related to each post returned in the 
 # query, and links them together, and returns one large list of all posts linked with lists of their images
 def database_posts(query):
@@ -342,6 +334,7 @@ def database_posts(query):
         data.append(post_with_image)
     print(data)
     return data
+
 
 # Endpoint to query Post table, accepts either specific post id, post tag, or user id, email, first and/or last name
 # Example get request: serviceup.com/get_posts?tag=paint&email=test@gmail.com
@@ -382,13 +375,16 @@ def get_posts():
         posts_query = f"select * from Posts where userID = {users[0][0]};"
         return jsonify(database_posts(posts_query))
 
+
 @app.route('/post')
 def post():
     return render_template('post.html')
 
+
 @app.route('/new_post')
 def new_post():
     return render_template('new_postNEW.html')
+
 
 @app.route('/messaging')
 def messaging():
@@ -397,71 +393,16 @@ def messaging():
 
     return render_template('messaging.html')
 
-@app.route('/messageuser')
-def messageUser():
-    return render_template('messageUser.html')
 
 @app.route("/terms_of_service")
 def terms_of_service():
     return render_template('tos.html')
 
+
 @app.route("/privacy_policy")
 def privacy_policy():
     return render_template('pp.html')
 
-#### Adding Route to handle adding posts to the database 
-@app.route('/adding_post',methods=['GET', 'POST'])
-def adding_post():
-    if request.method == 'POST':
-        new_post_dict = request.json # this should give us a dictionary with our inputs lets try it
-        # grabbing dict data
-        service_name = new_post_dict['serv']
-        offerer = new_post_dict['who']
-        availability = new_post_dict['when']
-        compensation = new_post_dict['how']
-        description = new_post_dict['desc']
-
-        # Connect to the database so that we could insert new post information 
-        db = mysql.connect(user=db_user, password=db_pass, host=db_host, database=db_name)
-        cursor = db.cursor()
-        cursor.execute('INSERT INTO Posts(id, service_type, who, available, compensation, info) VALUES (%s,%s,%s,%s,%s)', (session['id'], service_name, offerer, availability, compensation, description))
-        db.commit()
-
-        # Selecting Records - just to check to make sure all is good
-        cursor.execute("select * from Posts;")
-        print('---------- DATABASE INITIALIZED ----------')
-        [print(x) for x in cursor]
-        db.close()
-
-    else:
-        print('-------could not get post-------')
-    
-    return 'Success'
-
-@app.route('/load_more',methods=['POST'])
-def load_more():
-    city = ""
-
-    try:
-        ip = request.remote_addr
-        print(ip)
-        city = handler.getDetails(ip).city
-    except:
-        city = "San Diego"
-
-    print(city)
-    offset = request.form['offest']
-    print(offset)
-
-    db = mysql.connect(user=db_user, password=db_pass, host=db_host, database=db_name)
-    cursor = db.cursor()
-    query = (f"select id, title, description, price, tag, city, timestamp from Posts where city={city} limit 12 offset {offset};")
-    cursor.execute(query)
-    posts = cursor.fetchall()
-    db.commit()
-    db.close()
-
-    return posts
 
 @app.route('/favicon.ico') 
 def favicon(): 
@@ -527,10 +468,6 @@ def add_chat(receiverId):
     #chat doesnt already exists between users
     if chats == 0:
         database(f'insert into Chats (receiverID, senderID) values ("{receiverId}", "{userID}");')
-        print(database("select * from Chats;"))
-
-    print(receiverId, userID)
-    print(database("select * from Chats;"))
 
     return {"message": 'success'}
 

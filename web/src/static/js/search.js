@@ -4,6 +4,7 @@ var baseUrl = getUrl .protocol + "/" + getUrl.host + "/" + getUrl.pathname.split
 document.addEventListener("DOMContentLoaded", (event) => {
   var offset = 0;
   var dataURL = base_link + "get_filter/";
+  var usingSearch = false;
   
   loadMore();
   var load_more = document.getElementById("load");
@@ -84,6 +85,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
     if(offset < 11) {
       document.getElementById("load").style.visibility = "hidden";
     }
+
+    console.log("finished");
+    usingSearch = false;
   }
 
   function showError(err) {
@@ -91,12 +95,16 @@ document.addEventListener("DOMContentLoaded", (event) => {
   } 
 
   function loadMore() {
-    var theFilterReq = document.getElementById("filter").innerHTML;
+    if(!usingSearch) {
+      var theFilterReq = document.getElementById("filter").innerHTML;
+      usingSearch = true;
+      console.log("using");
 
-	  fetch(dataURL + String(offset) + "/" + theFilterReq.substring(23))
-	    .then(response=>response.json())
-	    .then(update)
-	    .catch(showError)
+  	  fetch(dataURL + String(offset) + "/" + theFilterReq.substring(23))
+  	    .then(response=>response.json())
+  	    .then(update)
+  	    .catch(showError)
+    } 
   }
   
   function postClicked(anId) {

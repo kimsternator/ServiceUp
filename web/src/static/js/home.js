@@ -3,6 +3,7 @@ var getUrl = window.location;
 document.addEventListener("DOMContentLoaded", (event) => {
   var offset = 0;
   var dataURL = baseUrl + "/get_main_posts/";
+  var using = false;
   // var dataURL = "http://localhost:6004/get_main_posts/";
   
   loadMore();
@@ -85,6 +86,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
   	if(offset < 11) {
       document.getElementById("load").style.visibility = "hidden";
     }
+
+    using = false;
   }
 
   function showError(err) {
@@ -92,10 +95,14 @@ document.addEventListener("DOMContentLoaded", (event) => {
   } 
 
   function loadMore() {
-	  fetch(dataURL + String(offset))
-	    .then(response=>response.json())
-	    .then(update)
-	    .catch(showError)
+    if(!using){
+      using = true;
+
+      fetch(dataURL + String(offset))
+        .then(response=>response.json())
+        .then(update)
+        .catch(showError)
+    }
   }
   
   function postClicked(anId) {
