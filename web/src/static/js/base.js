@@ -28,11 +28,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
     var post = document.getElementById("post");
     var profile = document.getElementById("profile");
-    var setting = document.getElementById("setting");
     var home_icon = document.getElementById("home_icon");
     var myProfile = document.getElementById("myprof");
     var messaging = document.getElementById("messag");
-    var setting = document.getElementById("sett");
     var tos = document.getElementById("tos");
     var pp = document.getElementById("pp");
     var sign_inout = document.getElementById("sign");    
@@ -58,9 +56,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
       toggleDrop();
     });
     
-    setting.addEventListener("click", function() {
-      console.log("setting");
-    });
 
     tos.addEventListener("click", function() {
       console.log("tos");
@@ -87,10 +82,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
       window.location = (base_link + 'messaging');
     });
     
-    setting.addEventListener("click", function() {
-      console.log("setting");
-    });
-    
+
     // var modal = document.getElementById("myModal");
 
     // Get the button that opens the modal
