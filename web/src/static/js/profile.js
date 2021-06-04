@@ -58,7 +58,7 @@ function render_posts(data) {
 		pic.src = thePost[8][0];
 		title.innerHTML = thePost[2];
 		where.innerHTML = thePost[6];
-		time.innerHTML = thePost[7] + " hrs ago";
+		time.innerHTML = thePost[7];
 		post.id = thePost[0];
 		post.appendChild(pic);
 		post.appendChild(title);
